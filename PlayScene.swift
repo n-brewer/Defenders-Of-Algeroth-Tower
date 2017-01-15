@@ -111,6 +111,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         tower = SKSpriteNode(imageNamed: "Archer Tower")
         tower.position = CGPoint(x: (self.view?.frame.size.width)! / 1.5, y: (self.view?.frame.size.height)! / -2)
         tower.setScale(2)
+        tower.physicsBody?.affectedByGravity = false
+        tower.physicsBody?.isDynamic = true
+//        tower.physicsBody = SKPhysicsBody(rectangleOf: tower.size)
+        tower.physicsBody?.categoryBitMask = NodeCategory.tower
+        tower.physicsBody?.contactTestBitMask = NodeCategory.enemy
+        tower.physicsBody?.collisionBitMask = 0
         self.addChild(tower)
         
         
@@ -161,7 +167,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         enemy.physicsBody?.affectedByGravity = false
         
         enemy.physicsBody?.categoryBitMask = NodeCategory.enemy
-        enemy.physicsBody?.contactTestBitMask = NodeCategory.projectile
+        enemy.physicsBody?.contactTestBitMask = NodeCategory.projectile | NodeCategory.tower
 //        enemy.physicsBody?.collisionBitMask = 0
         
         let min = self.size.height / 8
@@ -195,6 +201,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         if (firstBody.categoryBitMask & NodeCategory.projectile) != 0  && (secondBody.categoryBitMask & NodeCategory.enemy) != 0 {
                 projectileHitEnemy(projectileNode: firstBody.node as! SKShapeNode, enemyNode: secondBody.node as! SKSpriteNode)
+        } else if (firstBody.categoryBitMask & NodeCategory.enemy) != 0 && (secondBody.categoryBitMask & NodeCategory.tower) != 0 {
+                enemyAttacksTower(towerNode: firstBody.node as! SKSpriteNode, enemyNode: secondBody.node as! SKSpriteNode)
         }
 
     }
@@ -203,6 +211,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     func projectileHitEnemy(projectileNode: SKShapeNode, enemyNode: SKSpriteNode) {
         print("\(projectileNode)")
         enemyNode.removeFromParent()
+    }
+    
+    func enemyAttacksTower(towerNode: SKSpriteNode, enemyNode: SKSpriteNode) {
+        print("ATTACK!")
+        towerNode.removeFromParent()
     }
     
     
