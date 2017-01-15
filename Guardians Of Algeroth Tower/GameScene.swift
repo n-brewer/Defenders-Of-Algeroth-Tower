@@ -8,6 +8,8 @@
 
 import SpriteKit
 import GameplayKit
+import UIKit
+
 
 class GameScene: SKScene {
     
@@ -30,8 +32,9 @@ class GameScene: SKScene {
             self.view?.presentScene(playScene!, transition: doors)
         })
         
-
-        }
+        let upgrade = childNode(withName: "upgrade")
+        
+    }
      
     
     
