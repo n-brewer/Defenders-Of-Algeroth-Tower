@@ -14,35 +14,74 @@ import UIKit
 class GameScene: SKScene {
     
     
+    var upgradesNode: SKSpriteNode!
+    var playNode: SKSpriteNode!
+//    var pauseNode: SKSpriteNode!
+//    var vc: UIViewController!
     
+//    @IBOutlet weak var upgradeBtn: SKSpriteNode!
     
     override func didMove(to view: SKView) {
-    
+        upgradesNode = childNode(withName: "upgrades") as! SKSpriteNode!
+        upgradesNode.name = "upgradeMe"
+        playNode = childNode(withName: "play") as! SKSpriteNode!
+        playNode.name = "play"
+//        pauseNode = childNode(withName: "pause") as! SKSpriteNode!
+//        pauseNode.name = "pause"
+        
+        
         
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let play = childNode(withName: "play")
-        let fade = SKAction.fadeOut(withDuration: 1.0)
+        let touch: UITouch = touches.first! as UITouch
+        let location = touch.location(in: self)
+        let node = self.atPoint(location)
+            
+        if node.name == "upgradeMe" {
+            upgradesTapped()
+        }
         
-        play?.run(fade, completion: {
+        if node.name == "play" {
+            playTapped()
+        }
+    
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        
+    }
+    
+    func upgradesTapped() {
+        var actionArray = [SKAction]()
+        let action = SKAction.resize(byWidth: 50, height: 40, duration: 0.1)
+        let nextAction = SKAction.resize(byWidth: -50, height: -40, duration: 0.1)
+        let moveScene = SKAction.run({
+            SKAction.wait(forDuration: 0.1)
+            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = mainStoryboard.instantiateViewController(withIdentifier: "UpgradeScene") as UIViewController
+            self.view?.window?.rootViewController?.present(vc, animated: true, completion: nil)
+        })
+        
+        actionArray.append(action)
+        actionArray.append(nextAction)
+        actionArray.append(moveScene)
+        upgradesNode.run(SKAction.sequence(actionArray))
+
+    }
+    
+    func playTapped() {
+        let fade = SKAction.fadeOut(withDuration: 1.0)
+        playNode?.run(fade, completion: {
             let doors = SKTransition.doorway(withDuration: 1.0)
             let playScene = PlayScene(fileNamed: "PlayScene")
             playScene?.scaleMode = .aspectFill
             self.view?.presentScene(playScene!, transition: doors)
         })
-        
-        let upgrade = childNode(withName: "upgrade")
-        
+
     }
-     
     
-    
-    override func update(_ currentTime: TimeInterval) {
-        
-       }
-    
-    }
+}
 
 
 

@@ -25,14 +25,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var touchCurrentPoint: CGPoint!
     var enemy: SKSpriteNode!
     var randomTimeInterval: TimeInterval = 2.0
+    var pauseNode: SKSpriteNode!
     
     
     struct ProjectileSettings {
-        static let pRadius = CGFloat(10)
-        static let pSnapLimit = CGFloat(10)
-        static let pTouchLimit = CGFloat(10)
+        static let pRadius = CGFloat(15)
+        static let pSnapLimit = CGFloat(15)
+        static let pTouchLimit = CGFloat(15)
         static let rangeLimit = CGFloat(50)
-        static let forceMultiplier = CGFloat(0.5)
+        static var forceMultiplier = CGFloat(1.7)
     }
 
     override func didMove(to view: SKView) {
@@ -42,6 +43,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         setupScene()
         setupShooter()
         startGameTime()
+        
+        pauseNode = childNode(withName: "pause") as! SKSpriteNode!
+        pauseNode.name = "pause"
         
         
     }
@@ -63,6 +67,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 draggingProjectile = true
             }
         }
+        let touch: UITouch = touches.first! as UITouch
+        let location = touch.location(in: self)
+        let node = self.atPoint(location)
+        
+        if node.name == "pause" {
+            self.view?.isPaused = true
+        }
+
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -149,6 +161,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         projectile.physicsBody?.categoryBitMask = NodeCategory.projectile
         projectile.physicsBody?.contactTestBitMask = NodeCategory.enemy
         projectile.physicsBody?.collisionBitMask = 0
+        projectile.physicsBody?.restitution = 1.0
         projectile.physicsBody?.usesPreciseCollisionDetection = true
         projectile.physicsBody?.affectedByGravity = false
 
