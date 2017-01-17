@@ -16,6 +16,7 @@ class GameScene: SKScene {
     
     var upgradesNode: SKSpriteNode!
     var playNode: SKSpriteNode!
+    var coinsEarned: Int?
 //    var pauseNode: SKSpriteNode!
 //    var vc: UIViewController!
     
@@ -59,7 +60,8 @@ class GameScene: SKScene {
         let moveScene = SKAction.run({
             SKAction.wait(forDuration: 0.1)
             let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = mainStoryboard.instantiateViewController(withIdentifier: "UpgradeScene") as UIViewController
+            let vc = mainStoryboard.instantiateViewController(withIdentifier: "UpgradeScene") as! UpgradeScene
+            vc.currentCoins = self.coinsEarned
             self.view?.window?.rootViewController?.present(vc, animated: true, completion: nil)
         })
         

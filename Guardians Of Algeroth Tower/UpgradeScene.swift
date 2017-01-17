@@ -8,14 +8,32 @@
 
 import UIKit
 import SpriteKit
+import GameplayKit
 
 class UpgradeScene: UIViewController {
     
     @IBOutlet weak var shopView: UIView!
     @IBOutlet weak var bouncyImage: UIImageView!
+    @IBOutlet weak var totalCoins: UILabel!
+    @IBOutlet weak var purchasedLbl: UILabel!
+    
+    var currentCoins: Int?
+    var bouncyBulletPurchased = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if bouncyBulletPurchased == true {
+            purchasedLbl.text = "Purchased!"
+        } else {
+            purchasedLbl.text = ""
+        }
+        
+        if currentCoins != nil {
+            totalCoins.text = "\(currentCoins!)"
+        } else {
+            totalCoins.text = "0"
+        }
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(bouncyImageTapped))
         bouncyImage.addGestureRecognizer(tap)
@@ -53,10 +71,32 @@ class UpgradeScene: UIViewController {
     
     func bouncyImageTapped() {
         let popUp = UIAlertController(title: "Bouncy Bullets", message: "Hit multuple enemies with bouncing bullets!", preferredStyle: .alert)
-        popUp.addAction(UIAlertAction(title: "200 Coins", style: .default, handler: nil))
+//        popUp.addAction(UIAlertAction(title: "200 Coins", style: .default, handler: nil))
+        popUp.addAction(UIAlertAction(title: "10 Coins", style: .default , handler: { (action) in
+            if self.currentCoins != nil && self.currentCoins! >= 1 {
+                self.currentCoins! -= 1
+                self.bouncyBulletPurchased = true
+                self.purchasedLbl.text = "Purchased!"
+                self.totalCoins.text = "\(self.currentCoins!)"
+                PlayScene.ProjectileSettings.pRadius = 20.0
+                PlayScene.ProjectileSettings.forceMultiplier = 2.0
+//                PlayScene.ProjectileSettings.collisionMask = UInt32(0.0)
+            } else {
+                print("Not enough coins")
+            }
+        }))
         popUp.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(popUp, animated: true, completion: nil)
-//        popUp.addAction(UIAlertController(title: "Bouncy Bullets", message: "Hit multiple enemies with these bouncing bullets!", preferredStyle: .alert))
+    }
+    
+    @IBAction func homeBtnTapped(_ sender: UIButton) {
+        
+//        let scene = GKScene(fileNamed: "GameScene")
+//        let sceneNode = scene?.rootNode as! GameScene?
+//        let view = self.view as! SKView?
+//        view?.presentScene(sceneNode)
+//        view?.ignoresSiblingOrder = true
+        self.dismiss(animated: true, completion: nil)
     }
 
 }

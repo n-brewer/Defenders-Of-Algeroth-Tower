@@ -56,11 +56,24 @@
                                         <color key="textColor" red="0.1176470588" green="0.41568627450000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Myh-0b-L65">
+                                        <rect key="frame" x="128" y="87" width="118" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="118" id="Ibl-DG-am3"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="WMD-35-e9q"/>
+                                            <constraint firstAttribute="height" constant="25" id="YFk-E6-jFC"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Palatino-Bold" family="Palatino" pointSize="17"/>
+                                        <color key="textColor" red="0.1176470588" green="0.58777265100671139" blue="0.20367554530201343" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.86274509803921573" green="0.70980392156862748" blue="0.30588235294117649" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="mdH-B6-ThP" firstAttribute="top" secondItem="eHZ-gQ-Q9W" secondAttribute="top" constant="20" id="4Q0-pm-MSg"/>
+                                    <constraint firstItem="Myh-0b-L65" firstAttribute="leading" secondItem="mdH-B6-ThP" secondAttribute="trailing" constant="8" id="7P5-wZ-rS4"/>
                                     <constraint firstItem="mdH-B6-ThP" firstAttribute="leading" secondItem="eHZ-gQ-Q9W" secondAttribute="leading" constant="20" id="NPK-tf-HJd"/>
+                                    <constraint firstItem="Myh-0b-L65" firstAttribute="top" secondItem="6kP-Un-TnB" secondAttribute="bottom" id="cRQ-uB-zx6"/>
                                     <constraint firstItem="6kP-Un-TnB" firstAttribute="centerY" secondItem="mdH-B6-ThP" secondAttribute="centerY" id="dQW-zp-rXZ"/>
                                     <constraint firstItem="6kP-Un-TnB" firstAttribute="leading" secondItem="mdH-B6-ThP" secondAttribute="trailing" constant="10" id="fYd-oB-crl"/>
                                 </constraints>
@@ -82,15 +95,28 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Fu-2x-7Ku">
+                                <rect key="frame" x="389" y="20" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="46" id="ID8-RO-bxB"/>
+                                    <constraint firstAttribute="height" constant="30" id="QYw-gC-78q"/>
+                                </constraints>
+                                <state key="normal" title="Home"/>
+                                <connections>
+                                    <action selector="homeBtnTapped:" destination="o8P-Xn-j2F" eventType="touchUpInside" id="ni7-Ew-M7d"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.82745098039999998" green="0.68627450980000004" blue="0.2901960784" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
                             <constraint firstItem="eHZ-gQ-Q9W" firstAttribute="leading" secondItem="PdN-p7-8H4" secondAttribute="leadingMargin" id="6cs-YC-yqa"/>
                             <constraint firstAttribute="trailingMargin" secondItem="eqw-4R-bGw" secondAttribute="trailing" constant="36" id="6ev-nQ-4f4"/>
                             <constraint firstItem="uNy-JF-sW0" firstAttribute="top" secondItem="mRU-Hz-HRS" secondAttribute="bottom" id="OJL-qr-1Z4"/>
+                            <constraint firstItem="4Fu-2x-7Ku" firstAttribute="top" secondItem="mRU-Hz-HRS" secondAttribute="bottom" id="PCT-Wn-bpY"/>
                             <constraint firstItem="X5I-ti-pXt" firstAttribute="top" secondItem="eHZ-gQ-Q9W" secondAttribute="bottom" constant="20" id="Pix-gD-IOg"/>
                             <constraint firstItem="eHZ-gQ-Q9W" firstAttribute="top" secondItem="zJi-hv-nOt" secondAttribute="bottom" id="PnC-zD-D08"/>
                             <constraint firstItem="zJi-hv-nOt" firstAttribute="top" secondItem="mRU-Hz-HRS" secondAttribute="bottom" constant="8" id="Wyj-VB-02a"/>
+                            <constraint firstItem="uNy-JF-sW0" firstAttribute="leading" secondItem="4Fu-2x-7Ku" secondAttribute="trailing" constant="34" id="a2T-kh-ZLZ"/>
                             <constraint firstItem="eqw-4R-bGw" firstAttribute="leading" secondItem="uNy-JF-sW0" secondAttribute="trailing" id="dQj-io-Xb8"/>
                             <constraint firstItem="zJi-hv-nOt" firstAttribute="leading" secondItem="PdN-p7-8H4" secondAttribute="leadingMargin" id="h8m-94-3VK"/>
                             <constraint firstItem="eHZ-gQ-Q9W" firstAttribute="trailing" secondItem="PdN-p7-8H4" secondAttribute="trailingMargin" id="hQE-5U-pGo"/>
@@ -99,7 +125,9 @@
                     </view>
                     <connections>
                         <outlet property="bouncyImage" destination="mdH-B6-ThP" id="tE8-Nq-8kf"/>
+                        <outlet property="purchasedLbl" destination="Myh-0b-L65" id="bVf-KI-vee"/>
                         <outlet property="shopView" destination="eHZ-gQ-Q9W" id="zrl-Of-7gx"/>
+                        <outlet property="totalCoins" destination="uNy-JF-sW0" id="jEp-a2-o1d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R8w-zL-6n4" userLabel="First Responder" sceneMemberID="firstResponder"/>

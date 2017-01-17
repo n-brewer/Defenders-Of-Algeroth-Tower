@@ -26,27 +26,36 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var enemy: SKSpriteNode!
     var randomTimeInterval: TimeInterval = 2.0
     var pauseNode: SKSpriteNode!
+    var resumeNode: SKSpriteNode!
+    var coinsLbl: UILabel!
+    var coins: Int!
+    var gameTimer: Timer!
+    var homeBtn: SKLabelNode!
+//    var skullMan: Enemy!
     
     
     struct ProjectileSettings {
-        static let pRadius = CGFloat(15)
-        static let pSnapLimit = CGFloat(15)
-        static let pTouchLimit = CGFloat(15)
+        static var pRadius = CGFloat(10)
+        static let pSnapLimit = CGFloat(10)
+        static let pTouchLimit = CGFloat(10)
         static let rangeLimit = CGFloat(50)
-        static var forceMultiplier = CGFloat(1.7)
+        static var forceMultiplier = CGFloat(0.5)
+//        static var collisionMask: UInt32 = 1
     }
 
     override func didMove(to view: SKView) {
+        
+        coins = 0
         physicsWorld.gravity = CGVector(dx: 0.0, dy: -9.8)
         physicsWorld.speed = 0.8
         physicsWorld.contactDelegate = self
         setupScene()
         setupShooter()
         startGameTime()
+//        wave1()
         
-        pauseNode = childNode(withName: "pause") as! SKSpriteNode!
-        pauseNode.name = "pause"
         
+        coinsLbl.text = "\(coins!)"
         
     }
     
@@ -73,6 +82,16 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         if node.name == "pause" {
             self.view?.isPaused = true
+            gameTimer.invalidate()
+        }
+        
+        if node.name == "resume" {
+            self.view?.isPaused = false
+            startGameTime()
+        }
+        
+        if node.name == "home" {
+            returnHomeTapped()
         }
 
     }
@@ -117,6 +136,27 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupScene() {
+        
+//        skullMan = Enemy(texture: SKTexture(imageNamed: "skeleton"), color: .clear, size: skullMan.enemySize , hitPoints: 3)
+//        skullMan.position = CGPoint(x: 0, y: 0)
+//        self.addChild(skullMan)
+        
+        pauseNode = childNode(withName: "pause") as! SKSpriteNode!
+        pauseNode.name = "pause"
+        resumeNode = childNode(withName: "resume") as! SKSpriteNode!
+        resumeNode.name = "resume"
+        homeBtn = SKLabelNode()
+        homeBtn.text = "Return Home"
+        homeBtn.fontName = "Palatino"
+        homeBtn.fontSize = 32.0
+        homeBtn.fontColor = UIColor.white
+        homeBtn.position = CGPoint(x: 0, y: 200)
+        homeBtn.name = "home"
+        homeBtn.color = UIColor(red: 0.5, green: 0.1, blue: 0.1, alpha: 0.5)
+        self.addChild(homeBtn)
+//        homeBtn.size = CGSize(width: 100, height: 40)
+        
+        
         randomTimeInterval = 2.0
        // let goblin = childNode(withName: "Goblin") as! Enemy
         //goblin.removeFromParent()
@@ -130,6 +170,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         tower.physicsBody?.contactTestBitMask = NodeCategory.enemy
         tower.physicsBody?.collisionBitMask = 0
         self.addChild(tower)
+        
+        coinsLbl = UILabel(frame: CGRect(x: (self.view?.frame.size.width)! - 120, y: 10, width: 100, height: 30))
+        coinsLbl.backgroundColor = UIColor(red: 0.7, green: 0.1, blue: 0.1, alpha: 0.7)
+        self.view?.addSubview(coinsLbl)
         
         
     }
@@ -161,7 +205,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         projectile.physicsBody?.categoryBitMask = NodeCategory.projectile
         projectile.physicsBody?.contactTestBitMask = NodeCategory.enemy
         projectile.physicsBody?.collisionBitMask = 0
-        projectile.physicsBody?.restitution = 1.0
+        projectile.physicsBody?.restitution = 0.1
         projectile.physicsBody?.usesPreciseCollisionDetection = true
         projectile.physicsBody?.affectedByGravity = false
 
@@ -181,7 +225,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         enemy.physicsBody?.categoryBitMask = NodeCategory.enemy
         enemy.physicsBody?.contactTestBitMask = NodeCategory.projectile | NodeCategory.tower
-//        enemy.physicsBody?.collisionBitMask = 0
+        enemy.physicsBody?.collisionBitMask = 0
         
         let min = self.size.height / 8
         let max = self.size.height / 2
@@ -224,6 +268,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     func projectileHitEnemy(projectileNode: SKShapeNode, enemyNode: SKSpriteNode) {
         print("\(projectileNode)")
         enemyNode.removeFromParent()
+        
+        coins! += 1
+        coinsLbl.text = "\(coins!)"
     }
     
     func enemyAttacksTower(towerNode: SKSpriteNode, enemyNode: SKSpriteNode) {
@@ -233,9 +280,32 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     
     func startGameTime() {
-        _ = Timer.scheduledTimer(timeInterval: randomTimeInterval, target: self, selector: #selector(spawnEnemy), userInfo: nil, repeats: false)
+        gameTimer = Timer.scheduledTimer(timeInterval: randomTimeInterval, target: self, selector: #selector(spawnEnemy), userInfo: nil, repeats: false)
 
     }
+    
+    func returnHomeTapped() {
+        let goHome = SKAction.wait(forDuration: 0.2)
+        homeBtn.run(goHome) {
+            let flip = SKTransition.flipHorizontal(withDuration: 1.0)
+            let homeScene = GameScene(fileNamed: "GameScene")
+            homeScene?.scaleMode = .aspectFill
+            homeScene?.coinsEarned = self.coins
+            self.view?.presentScene(homeScene!, transition: flip)
+            
+        }
+
+    }
+    
+//    func wave1(){
+//        let firstAction = SKAction.run { 
+//            self.gameTimer
+//        }
+//        let action = SKAction.repeat(firstAction, count: 3)
+//        
+//        self.run(action)
+//  
+//    }
 
 }
 
