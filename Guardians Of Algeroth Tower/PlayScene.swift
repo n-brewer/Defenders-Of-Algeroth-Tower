@@ -15,6 +15,17 @@ struct NodeCategory {
     static let projectile: UInt32 = 0x1 << 2
 }
 
+struct CategoryForNode: OptionSet {
+    let rawValue: UInt32
+    init(rawValue: UInt32) {
+        self.rawValue = rawValue
+    }
+    
+    static let enemy  = CategoryForNode(rawValue: 0b001)
+    static let projectile = CategoryForNode(rawValue: 0b010)
+    static let tower = CategoryForNode(rawValue: 0b100)
+}
+
 
 class PlayScene: SKScene, SKPhysicsContactDelegate {
     
@@ -41,6 +52,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         static let rangeLimit = CGFloat(50)
         static var forceMultiplier = CGFloat(0.5)
 //        static var collisionMask: UInt32 = 1
+    }
+    
+    struct TowerSettings {
+        static var towerImage = SKSpriteNode(imageNamed: "Archer Tower.png")
     }
 
     override func didMove(to view: SKView) {
@@ -137,10 +152,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     func setupScene() {
         
-//        skullMan = Enemy(texture: SKTexture(imageNamed: "skeleton"), color: .clear, size: skullMan.enemySize , hitPoints: 3)
-//        skullMan.position = CGPoint(x: 0, y: 0)
-//        self.addChild(skullMan)
-        
         pauseNode = childNode(withName: "pause") as! SKSpriteNode!
         pauseNode.name = "pause"
         resumeNode = childNode(withName: "resume") as! SKSpriteNode!
@@ -154,21 +165,18 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         homeBtn.name = "home"
         homeBtn.color = UIColor(red: 0.5, green: 0.1, blue: 0.1, alpha: 0.5)
         self.addChild(homeBtn)
-//        homeBtn.size = CGSize(width: 100, height: 40)
-        
-        
+
         randomTimeInterval = 2.0
-       // let goblin = childNode(withName: "Goblin") as! Enemy
-        //goblin.removeFromParent()
-        tower = SKSpriteNode(imageNamed: "Archer Tower")
+        tower = TowerSettings.towerImage
         tower.position = CGPoint(x: (self.view?.frame.size.width)! / 1.5, y: (self.view?.frame.size.height)! / -2)
         tower.setScale(2)
-        tower.physicsBody?.affectedByGravity = false
         tower.physicsBody?.isDynamic = true
-//        tower.physicsBody = SKPhysicsBody(rectangleOf: tower.size)
-        tower.physicsBody?.categoryBitMask = NodeCategory.tower
-        tower.physicsBody?.contactTestBitMask = NodeCategory.enemy
+        tower.physicsBody = SKPhysicsBody(rectangleOf: tower.size)
+        tower.physicsBody?.categoryBitMask = CategoryForNode.tower.rawValue
+        tower.physicsBody?.contactTestBitMask = CategoryForNode.enemy.rawValue
         tower.physicsBody?.collisionBitMask = 0
+        tower.physicsBody?.affectedByGravity = false
+
         self.addChild(tower)
         
         coinsLbl = UILabel(frame: CGRect(x: (self.view?.frame.size.width)! - 120, y: 10, width: 100, height: 30))
@@ -199,11 +207,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 //        let design = SKTexture(imageNamed: "Castle.png")
 
         projectile = Projectile(path: shotPath, color: UIColor.red)
-        projectile.position = CGPoint(x: tower.position.x, y: tower.position.y + 150)
+        projectile.position = CGPoint(x: tower.position.x - 80, y: tower.position.y + 150)
         projectile.physicsBody?.isDynamic = true
 //        projectile.physicsBody = SKPhysicsBody(circleOfRadius: ProjectileSettings.pRadius)
-        projectile.physicsBody?.categoryBitMask = NodeCategory.projectile
-        projectile.physicsBody?.contactTestBitMask = NodeCategory.enemy
+        projectile.physicsBody?.categoryBitMask = CategoryForNode.projectile.rawValue
+        projectile.physicsBody?.contactTestBitMask = CategoryForNode.enemy.rawValue
         projectile.physicsBody?.collisionBitMask = 0
         projectile.physicsBody?.restitution = 0.1
         projectile.physicsBody?.usesPreciseCollisionDetection = true
@@ -217,14 +225,16 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         let minPause: UInt32 = UInt32(1)
         let randomNumber = TimeInterval(arc4random_uniform(5) + minPause)
         randomTimeInterval = randomNumber
-        enemy = SKSpriteNode(imageNamed: "GoblinTest.png")
+        let enemySize: CGSize = CGSize(width: 80, height: 80)
+//        enemy = SKSpriteNode(imageNamed: "GoblinTest.png")
+        enemy = Enemy(texture: nil, color: .cyan, size: enemySize, hitPoints: 2)
         enemy.size = CGSize(width: 100, height: 100)
         enemy.physicsBody = SKPhysicsBody(rectangleOf: enemy.size)
         enemy.physicsBody?.isDynamic = true
         enemy.physicsBody?.affectedByGravity = false
         
-        enemy.physicsBody?.categoryBitMask = NodeCategory.enemy
-        enemy.physicsBody?.contactTestBitMask = NodeCategory.projectile | NodeCategory.tower
+        enemy.physicsBody?.categoryBitMask = CategoryForNode.enemy.rawValue
+        enemy.physicsBody?.contactTestBitMask = CategoryForNode.tower.rawValue
         enemy.physicsBody?.collisionBitMask = 0
         
         let min = self.size.height / 8
@@ -245,29 +255,63 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     func didBegin(_ contact: SKPhysicsContact) {
         
-        var firstBody: SKPhysicsBody
-        var secondBody: SKPhysicsBody
+        let contactCategory: CategoryForNode = [contact.bodyA.category, contact.bodyB.category]
         
-        if (contact.bodyA.categoryBitMask) == (NodeCategory.projectile) {
-            firstBody = contact.bodyA
-            secondBody = contact.bodyB
+//        if contactCategory.contains([.tower, .projectile]) {
+//            if (contact.bodyA.category == .tower) && (contact.bodyB.category == .projectile) || (contact.bodyA.category == .projectile) && (contact.bodyB.category == .tower) {
+//                print("do nothing")
+//            } else {
+//                print("what the heck")
+//            }
+//            
+        if contactCategory.contains([.enemy, .projectile]) {
+            if contact.bodyA.category == .enemy {
+                projectileHitEnemy(projectileNode: contact.bodyB.node! as! SKShapeNode, enemyNode: contact.bodyA.node! as! Enemy)
+            } else if contact.bodyB.category == .enemy {
+                projectileHitEnemy(projectileNode: contact.bodyA.node! as! SKShapeNode, enemyNode: contact.bodyB.node! as! Enemy)
+            }
+        } else if contactCategory.contains([.enemy, .tower]) {
+            if contact.bodyA.category == .enemy {
+                enemyAttacksTower(towerNode: contact.bodyB.node! as! SKSpriteNode, enemyNode: contact.bodyA.node! as! SKSpriteNode)
+            } else {
+                enemyAttacksTower(towerNode: contact.bodyA.node! as! SKSpriteNode, enemyNode: contact.bodyB.node! as! SKSpriteNode)
+            }
         } else {
-            firstBody = contact.bodyB
-            secondBody = contact.bodyA
+            print("whatever")
         }
         
-        if (firstBody.categoryBitMask & NodeCategory.projectile) != 0  && (secondBody.categoryBitMask & NodeCategory.enemy) != 0 {
-                projectileHitEnemy(projectileNode: firstBody.node as! SKShapeNode, enemyNode: secondBody.node as! SKSpriteNode)
-        } else if (firstBody.categoryBitMask & NodeCategory.enemy) != 0 && (secondBody.categoryBitMask & NodeCategory.tower) != 0 {
-                enemyAttacksTower(towerNode: firstBody.node as! SKSpriteNode, enemyNode: secondBody.node as! SKSpriteNode)
-        }
-
+        
+//        var firstBody: SKPhysicsBody
+//        var secondBody: SKPhysicsBody
+//        
+//        if (contact.bodyA.categoryBitMask) == (NodeCategory.projectile) {
+//            firstBody = contact.bodyA
+//            secondBody = contact.bodyB
+//        } else {
+//            firstBody = contact.bodyB
+//            secondBody = contact.bodyA
+//        }
+//        
+//        if (firstBody.categoryBitMask & NodeCategory.projectile) != 0  && (secondBody.categoryBitMask & NodeCategory.enemy) != 0 {
+//                projectileHitEnemy(projectileNode: firstBody.node as! SKShapeNode, enemyNode: secondBody.node as! SKSpriteNode)
+//        } else if (firstBody.categoryBitMask & NodeCategory.enemy) != 0 && (secondBody.categoryBitMask & NodeCategory.tower) != 0 {
+//                enemyAttacksTower(towerNode: firstBody.node as! SKSpriteNode, enemyNode: secondBody.node as! SKSpriteNode)
+//        }
+//
     }
     
     
-    func projectileHitEnemy(projectileNode: SKShapeNode, enemyNode: SKSpriteNode) {
+    func projectileHitEnemy(projectileNode: SKShapeNode, enemyNode: Enemy) {
         print("\(projectileNode)")
-        enemyNode.removeFromParent()
+        let monster = enemyNode
+        monster.hp -= 1
+        
+        if monster.hp <= 0 {
+            enemyNode.removeFromParent()
+        } else {
+            print("not dead yet")
+        }
+        
         
         coins! += 1
         coinsLbl.text = "\(coins!)"
@@ -308,6 +352,19 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 //    }
 
 }
+
+
+extension SKPhysicsBody {
+    var category: CategoryForNode {
+        get {
+            return CategoryForNode(rawValue: self.categoryBitMask)
+        }
+        set(newValue) {
+            self.categoryBitMask = newValue.rawValue
+        }
+    }
+}
+
 
 
 

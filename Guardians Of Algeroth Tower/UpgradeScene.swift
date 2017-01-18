@@ -80,7 +80,8 @@ class UpgradeScene: UIViewController {
                 self.totalCoins.text = "\(self.currentCoins!)"
                 PlayScene.ProjectileSettings.pRadius = 20.0
                 PlayScene.ProjectileSettings.forceMultiplier = 2.0
-//                PlayScene.ProjectileSettings.collisionMask = UInt32(0.0)
+
+                PlayScene.TowerSettings.towerImage = SKSpriteNode(imageNamed: "Castle.png")
             } else {
                 print("Not enough coins")
             }

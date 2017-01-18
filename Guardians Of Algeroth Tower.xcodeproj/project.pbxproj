@@ -19,7 +19,7 @@
 		C6C756031E2B2D2E00F11EDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C756021E2B2D2E00F11EDB /* AppDelegate.swift */; };
 		C6C7560A1E2B2D6C00F11EDB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6C756081E2B2D6C00F11EDB /* LaunchScreen.storyboard */; };
 		C6C7560B1E2B2D6C00F11EDB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6C756091E2B2D6C00F11EDB /* Main.storyboard */; };
-		C6C756121E2B2D9000F11EDB /* Castle11111.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C7560C1E2B2D9000F11EDB /* Castle11111.png */; };
+		C6C756121E2B2D9000F11EDB /* Castle.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C7560C1E2B2D9000F11EDB /* Castle.png */; };
 		C6C756141E2B2D9000F11EDB /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C6C7560E1E2B2D9000F11EDB /* GameScene.sks */; };
 		C6C756151E2B2D9000F11EDB /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C7560F1E2B2D9000F11EDB /* GameScene.swift */; };
 		C6C756161E2B2D9000F11EDB /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C756101E2B2D9000F11EDB /* GameViewController.swift */; };
@@ -45,7 +45,7 @@
 		C6C756021E2B2D2E00F11EDB /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C6C756081E2B2D6C00F11EDB /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C6C756091E2B2D6C00F11EDB /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		C6C7560C1E2B2D9000F11EDB /* Castle11111.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castle11111.png; sourceTree = "<group>"; };
+		C6C7560C1E2B2D9000F11EDB /* Castle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castle.png; sourceTree = "<group>"; };
 		C6C7560E1E2B2D9000F11EDB /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		C6C7560F1E2B2D9000F11EDB /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		C6C756101E2B2D9000F11EDB /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -100,7 +100,7 @@
 				C6C7562A1E2B324800F11EDB /* Play.png */,
 				C6C7562C1E2B335000F11EDB /* Upgrades.png */,
 				C6C755A81E29D8C400F11EDB /* GoblinTest.png */,
-				C6C7560C1E2B2D9000F11EDB /* Castle11111.png */,
+				C6C7560C1E2B2D9000F11EDB /* Castle.png */,
 				C6C755A01E29B8AD00F11EDB /* Archer Tower.png */,
 				C6C755A11E29B8AD00F11EDB /* GameBG.png */,
 				C6643A2E1E2DD6B300B67504 /* MyTileSet.sks */,
@@ -196,7 +196,7 @@
 				C6C7560B1E2B2D6C00F11EDB /* Main.storyboard in Resources */,
 				C6C756011E2B2D1B00F11EDB /* Action.sks in Resources */,
 				C6C7561E1E2B2DAA00F11EDB /* PlayScene.sks in Resources */,
-				C6C756121E2B2D9000F11EDB /* Castle11111.png in Resources */,
+				C6C756121E2B2D9000F11EDB /* Castle.png in Resources */,
 				C6C7560A1E2B2D6C00F11EDB /* LaunchScreen.storyboard in Resources */,
 				C6C7562B1E2B324800F11EDB /* Play.png in Resources */,
 				C6C755EF1E2AA1D000F11EDB /* Assets.xcassets in Resources */,
