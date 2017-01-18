@@ -41,6 +41,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var coinsLbl: UILabel!
     var coins: Int!
     var gameTimer: Timer!
+    var enemyAttackTimer: Timer!
     var homeBtn: SKLabelNode!
 //    var skullMan: Enemy!
     
@@ -167,9 +168,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(homeBtn)
 
         randomTimeInterval = 2.0
-        tower = TowerSettings.towerImage
+        let towerSize: CGSize = CGSize(width: 180, height: 260)
+        let towerTexture = SKTexture(imageNamed: "Archer Tower.png")
+        tower = Tower(texture: towerTexture, color: .clear, size: towerSize, hitPoints: 500)
+//        tower = TowerSettings.towerImage
         tower.position = CGPoint(x: (self.view?.frame.size.width)! / 1.5, y: (self.view?.frame.size.height)! / -2)
-        tower.setScale(2)
+        
         tower.physicsBody?.isDynamic = true
         tower.physicsBody = SKPhysicsBody(rectangleOf: tower.size)
         tower.physicsBody?.categoryBitMask = CategoryForNode.tower.rawValue
@@ -212,7 +216,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 //        projectile.physicsBody = SKPhysicsBody(circleOfRadius: ProjectileSettings.pRadius)
         projectile.physicsBody?.categoryBitMask = CategoryForNode.projectile.rawValue
         projectile.physicsBody?.contactTestBitMask = CategoryForNode.enemy.rawValue
-        projectile.physicsBody?.collisionBitMask = 0
+        projectile.physicsBody?.collisionBitMask = CategoryForNode.tower.rawValue
         projectile.physicsBody?.restitution = 0.1
         projectile.physicsBody?.usesPreciseCollisionDetection = true
         projectile.physicsBody?.affectedByGravity = false
@@ -223,11 +227,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     func spawnEnemy() {
         let minPause: UInt32 = UInt32(1)
-        let randomNumber = TimeInterval(arc4random_uniform(5) + minPause)
+        let randomNumber = TimeInterval(arc4random_uniform(4) + minPause)
         randomTimeInterval = randomNumber
         let enemySize: CGSize = CGSize(width: 80, height: 80)
+        let design = SKTexture(imageNamed: "GoblinTest.png")
 //        enemy = SKSpriteNode(imageNamed: "GoblinTest.png")
-        enemy = Enemy(texture: nil, color: .cyan, size: enemySize, hitPoints: 2)
+        enemy = Enemy(texture: design , color: .cyan, size: enemySize, hitPoints: 2)
         enemy.size = CGSize(width: 100, height: 100)
         enemy.physicsBody = SKPhysicsBody(rectangleOf: enemy.size)
         enemy.physicsBody?.isDynamic = true
@@ -243,9 +248,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         let yPosition = Int((arc4random_uniform(UInt32(result) + 100)))
         let properPlace = (yPosition * -1)
-        print("\(properPlace)")
+//        print("\(properPlace)")
         enemy.position = CGPoint(x: -700, y: Int(properPlace))
-        enemy.run(SKAction.move(to: CGPoint(x: tower.position.x - 30, y: tower.position.y), duration: 5.0))
+        enemy.run(SKAction.move(to: CGPoint(x: tower.position.x - 120, y: tower.position.y), duration: 5.0))
         self.addChild(enemy)
         
 //        print("\(randomTimeInterval)")
@@ -272,9 +277,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             }
         } else if contactCategory.contains([.enemy, .tower]) {
             if contact.bodyA.category == .enemy {
-                enemyAttacksTower(towerNode: contact.bodyB.node! as! SKSpriteNode, enemyNode: contact.bodyA.node! as! SKSpriteNode)
+                enemyAttacksTower(towerNode: contact.bodyB.node as! Tower, enemyNode: contact.bodyA.node as! Enemy)
             } else {
-                enemyAttacksTower(towerNode: contact.bodyA.node! as! SKSpriteNode, enemyNode: contact.bodyB.node! as! SKSpriteNode)
+                enemyAttacksTower(towerNode: contact.bodyA.node as! Tower, enemyNode: contact.bodyB.node as! Enemy)
             }
         } else {
             print("whatever")
@@ -305,9 +310,19 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         print("\(projectileNode)")
         let monster = enemyNode
         monster.hp -= 1
+        let blood = createBloodSplatter(dyingEnemy: monster).copy() as! SKEmitterNode
+        self.addChild(blood )
+        let firstStep = SKAction.wait(forDuration: 1.0)
+        let secondStep = SKAction.run {
+            blood.removeFromParent()
+        }
+        blood.run(SKAction.sequence([firstStep, secondStep]))
+        
+        
         
         if monster.hp <= 0 {
-            enemyNode.removeFromParent()
+            monster.removeAllActions()
+            monster.removeFromParent()
         } else {
             print("not dead yet")
         }
@@ -317,10 +332,36 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         coinsLbl.text = "\(coins!)"
     }
     
-    func enemyAttacksTower(towerNode: SKSpriteNode, enemyNode: SKSpriteNode) {
+    func enemyAttacksTower(towerNode: Tower, enemyNode: Enemy) {
         print("ATTACK!")
-        towerNode.removeFromParent()
+        let tower = towerNode
+        let enemy = enemyNode
+        let action = SKAction.run {
+            tower.hp -= 1
+            print("HITPOINTS \(tower.hp)")
+        }
+        let delay = SKAction.wait(forDuration: 1.0)
+        let seq = SKAction.sequence([action, delay])
+        enemy.run(SKAction.repeatForever(seq))
+
+        if tower.hp <= 0 {
+            tower.removeFromParent()
+            enemy.removeAllActions()
+            print("GAME OVER")
+        }
+        
+        if enemyNode.resignFirstResponder() {
+            enemyAttackTimer.invalidate()
+        }
+//        towerNode.removeFromParent()
     }
+    
+//    func enemyAttacksWithTimer() {
+//        let theTower: Tower
+//        theTower = Tower
+////        tower.hp -= 1
+//        print("HITPOINTS: \(tower.hp)")
+//    }
     
     
     func startGameTime() {
@@ -340,6 +381,40 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
 
     }
+    
+    func createBloodSplatter(dyingEnemy: SKSpriteNode) -> SKEmitterNode {
+        let blood = SKEmitterNode()
+        let deadman = dyingEnemy
+        
+        blood.particleTexture = SKTexture(imageNamed: "particle0.png")
+        blood.particleColor = UIColor.red
+        blood.numParticlesToEmit = 35
+        blood.particleBirthRate = 200
+        blood.particleLifetime = 1.0
+        blood.emissionAngleRange = 360
+        blood.particleSpeed = 50
+        blood.particleSpeedRange = 20
+        blood.xAcceleration = 0
+        blood.yAcceleration = 0
+        blood.particleAlpha = 0.8
+        blood.particleAlphaRange = 0.2
+        blood.particleAlphaSpeed = -0.5
+        blood.particleScale = 1.5
+        blood.particleScaleRange = 0.4
+        blood.particleScaleSpeed = -0.5
+        blood.particleRotation = 0
+        blood.particleRotationRange = 0
+        blood.particleRotationSpeed = 0
+        
+        blood.particleColorBlendFactor = 1
+        blood.particleColorBlendFactorRange = 0
+        blood.particleColorBlendFactorSpeed = 0
+        blood.particleBlendMode = SKBlendMode.alpha
+        blood.position = deadman.position
+        
+        return blood
+    }
+
     
 //    func wave1(){
 //        let firstAction = SKAction.run { 
@@ -363,6 +438,7 @@ extension SKPhysicsBody {
             self.categoryBitMask = newValue.rawValue
         }
     }
+    
 }
 
 

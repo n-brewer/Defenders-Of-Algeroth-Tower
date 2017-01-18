@@ -27,7 +27,6 @@ class Enemy: SKSpriteNode {
     var hp: Int
     
     init(texture: SKTexture?, color: UIColor, size: CGSize?, hitPoints: Int) {
-//        super.init(texture: <#T##SKTexture?#>, color: <#T##UIColor#>, size: <#T##CGSize#>)
         
         self.hp = hitPoints
 
@@ -35,24 +34,23 @@ class Enemy: SKSpriteNode {
     }
     
     required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
         fatalError("init(coder:) has not been implemented")
     }
     
 }
-//
-//class SkullMan: Enemy {
-//    
-//    var newHp: Int = 5
-//    init() {
-//        super.init(texture: SkullMan.init().design, color: SkullMan.init().enemyColor, size: SkullMan.init().enemySize, hitPoints: newHp)
-//    }
-//    
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//}
 
+class Tower: SKSpriteNode {
+    
+    var hp: Int
+    init(texture: SKTexture?, color: UIColor, size: CGSize, hitPoints: Int) {
+        self.hp = hitPoints
+        super.init(texture: texture, color: color, size: size)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
 
 
 
