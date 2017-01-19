@@ -38,8 +38,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var randomTimeInterval: TimeInterval = 2.0
     var pauseNode: SKSpriteNode!
     var resumeNode: SKSpriteNode!
-    var coinsLbl: UILabel!
+    var coinsLbl: SKLabelNode!
     var coins: Int!
+    var coinsImage: SKSpriteNode!
     var gameTimer: Timer!
     var enemyAttackTimer: Timer!
     var homeBtn: SKLabelNode!
@@ -52,26 +53,31 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         static let pTouchLimit = CGFloat(10)
         static let rangeLimit = CGFloat(50)
         static var forceMultiplier = CGFloat(0.5)
+        static var isBouncy: Bool = false
+        static var damage: Int = 1
 //        static var collisionMask: UInt32 = 1
     }
     
     struct TowerSettings {
-        static var towerImage = SKSpriteNode(imageNamed: "Archer Tower.png")
+        static var towerImage = SKTexture(imageNamed: "Archer Tower.png")
+        static var keepImage = SKTexture(imageNamed: "Castle.png")
+        static var fortressImage = SKTexture(imageNamed: "Fortress.png")
     }
 
     override func didMove(to view: SKView) {
         
-        coins = 0
+        if coins == nil {
+            coins = 0
+        }
         physicsWorld.gravity = CGVector(dx: 0.0, dy: -9.8)
         physicsWorld.speed = 0.8
         physicsWorld.contactDelegate = self
         setupScene()
         setupShooter()
         startGameTime()
+        
+        
 //        wave1()
-        
-        
-        coinsLbl.text = "\(coins!)"
         
     }
     
@@ -157,6 +163,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         pauseNode.name = "pause"
         resumeNode = childNode(withName: "resume") as! SKSpriteNode!
         resumeNode.name = "resume"
+        coinsImage = childNode(withName: "coins") as! SKSpriteNode!
         homeBtn = SKLabelNode()
         homeBtn.text = "Return Home"
         homeBtn.fontName = "Palatino"
@@ -175,7 +182,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         tower.position = CGPoint(x: (self.view?.frame.size.width)! / 1.5, y: (self.view?.frame.size.height)! / -2)
         
         tower.physicsBody?.isDynamic = true
-        tower.physicsBody = SKPhysicsBody(rectangleOf: tower.size)
+        tower.physicsBody = SKPhysicsBody(circleOfRadius: tower.size.width / 2)
         tower.physicsBody?.categoryBitMask = CategoryForNode.tower.rawValue
         tower.physicsBody?.contactTestBitMask = CategoryForNode.enemy.rawValue
         tower.physicsBody?.collisionBitMask = 0
@@ -183,9 +190,16 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 
         self.addChild(tower)
         
-        coinsLbl = UILabel(frame: CGRect(x: (self.view?.frame.size.width)! - 120, y: 10, width: 100, height: 30))
-        coinsLbl.backgroundColor = UIColor(red: 0.7, green: 0.1, blue: 0.1, alpha: 0.7)
-        self.view?.addSubview(coinsLbl)
+        coinsLbl = SKLabelNode()
+        coinsLbl.position = CGPoint(x: coinsImage.position.x - 100, y: coinsImage.position.y)
+        coinsLbl.fontColor = .white
+        coinsLbl.color = .clear
+        coinsLbl.horizontalAlignmentMode = .center
+        coinsLbl.verticalAlignmentMode = .center
+        coinsLbl.fontName = "Palatino"
+        coinsLbl.fontSize = 40.0
+        self.addChild(coinsLbl)
+        coinsLbl.text = "\(Artifacts.PlayerCoins)"
         
         
     }
@@ -203,24 +217,17 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupShooter() {
-//        let shooter = SKSpriteNode(imageNamed: "Castle.png")
-//        shooter.position = CGPoint(x: tower.position.x - 5, y: tower.position.y + 1)
-//        self.addChild(shooter)
-        
         let shotPath = UIBezierPath(arcCenter: CGPoint.zero, radius: ProjectileSettings.pRadius, startAngle: 0, endAngle: CGFloat(M_PI * 2), clockwise: true)
-//        let design = SKTexture(imageNamed: "Castle.png")
 
         projectile = Projectile(path: shotPath, color: UIColor.red)
         projectile.position = CGPoint(x: tower.position.x - 80, y: tower.position.y + 150)
         projectile.physicsBody?.isDynamic = true
-//        projectile.physicsBody = SKPhysicsBody(circleOfRadius: ProjectileSettings.pRadius)
         projectile.physicsBody?.categoryBitMask = CategoryForNode.projectile.rawValue
         projectile.physicsBody?.contactTestBitMask = CategoryForNode.enemy.rawValue
         projectile.physicsBody?.collisionBitMask = CategoryForNode.tower.rawValue
         projectile.physicsBody?.restitution = 0.1
         projectile.physicsBody?.usesPreciseCollisionDetection = true
         projectile.physicsBody?.affectedByGravity = false
-
         
         self.addChild(projectile)
     }
@@ -231,13 +238,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         randomTimeInterval = randomNumber
         let enemySize: CGSize = CGSize(width: 80, height: 80)
         let design = SKTexture(imageNamed: "GoblinTest.png")
-//        enemy = SKSpriteNode(imageNamed: "GoblinTest.png")
         enemy = Enemy(texture: design , color: .cyan, size: enemySize, hitPoints: 2)
         enemy.size = CGSize(width: 100, height: 100)
         enemy.physicsBody = SKPhysicsBody(rectangleOf: enemy.size)
         enemy.physicsBody?.isDynamic = true
         enemy.physicsBody?.affectedByGravity = false
-        
         enemy.physicsBody?.categoryBitMask = CategoryForNode.enemy.rawValue
         enemy.physicsBody?.contactTestBitMask = CategoryForNode.tower.rawValue
         enemy.physicsBody?.collisionBitMask = 0
@@ -248,12 +253,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         let yPosition = Int((arc4random_uniform(UInt32(result) + 100)))
         let properPlace = (yPosition * -1)
-//        print("\(properPlace)")
         enemy.position = CGPoint(x: -700, y: Int(properPlace))
         enemy.run(SKAction.move(to: CGPoint(x: tower.position.x - 120, y: tower.position.y), duration: 5.0))
         self.addChild(enemy)
-        
-//        print("\(randomTimeInterval)")
+
         startGameTime()
         
     }
@@ -307,9 +310,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     
     func projectileHitEnemy(projectileNode: SKShapeNode, enemyNode: Enemy) {
+        
+        if ProjectileSettings.isBouncy == false {
+            projectileNode.removeFromParent()
+        } else {
+            print("Got dem Bouncy's")
+        }
         print("\(projectileNode)")
         let monster = enemyNode
-        monster.hp -= 1
+        monster.hp -= ProjectileSettings.damage
         let blood = createBloodSplatter(dyingEnemy: monster).copy() as! SKEmitterNode
         self.addChild(blood )
         let firstStep = SKAction.wait(forDuration: 1.0)
@@ -323,13 +332,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         if monster.hp <= 0 {
             monster.removeAllActions()
             monster.removeFromParent()
+            Artifacts.PlayerCoins += 1
         } else {
             print("not dead yet")
         }
         
-        
-        coins! += 1
-        coinsLbl.text = "\(coins!)"
+        coinsLbl.text = "\(Artifacts.PlayerCoins)"
     }
     
     func enemyAttacksTower(towerNode: Tower, enemyNode: Enemy) {

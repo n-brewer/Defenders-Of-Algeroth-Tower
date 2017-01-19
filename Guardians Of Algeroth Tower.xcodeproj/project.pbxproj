@@ -12,6 +12,7 @@
 		C66C3CFF1E2C4AE600024C5D /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C66C3CFE1E2C4AE600024C5D /* SpriteKit.framework */; };
 		C66C3D011E2C67D000024C5D /* Coins.png in Resources */ = {isa = PBXBuildFile; fileRef = C66C3D001E2C67D000024C5D /* Coins.png */; };
 		C66CB0471E2F2B2B00844046 /* particle0.png in Resources */ = {isa = PBXBuildFile; fileRef = C66CB0461E2F2B2B00844046 /* particle0.png */; };
+		C66CB0491E302AEA00844046 /* UpgradeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66CB0481E302AEA00844046 /* UpgradeCell.swift */; };
 		C6C755A31E29B8AD00F11EDB /* Archer Tower.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C755A01E29B8AD00F11EDB /* Archer Tower.png */; };
 		C6C755A41E29B8AD00F11EDB /* GameBG.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C755A11E29B8AD00F11EDB /* GameBG.png */; };
 		C6C755A91E29D8C400F11EDB /* GoblinTest.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C755A81E29D8C400F11EDB /* GoblinTest.png */; };
@@ -38,6 +39,7 @@
 		C66C3CFE1E2C4AE600024C5D /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		C66C3D001E2C67D000024C5D /* Coins.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Coins.png; sourceTree = "<group>"; };
 		C66CB0461E2F2B2B00844046 /* particle0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = particle0.png; sourceTree = "<group>"; };
+		C66CB0481E302AEA00844046 /* UpgradeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpgradeCell.swift; sourceTree = "<group>"; };
 		C6C755641E29B52100F11EDB /* Guardians Of Algeroth Tower.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Guardians Of Algeroth Tower.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6C755A01E29B8AD00F11EDB /* Archer Tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Archer Tower.png"; sourceTree = "<group>"; };
 		C6C755A11E29B8AD00F11EDB /* GameBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GameBG.png; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				C6C756081E2B2D6C00F11EDB /* LaunchScreen.storyboard */,
 				C6C756091E2B2D6C00F11EDB /* Main.storyboard */,
 				C66C3CFB1E2BE65F00024C5D /* UpgradeScene.swift */,
+				C66CB0481E302AEA00844046 /* UpgradeCell.swift */,
 				C6C7560E1E2B2D9000F11EDB /* GameScene.sks */,
 				C6C7560F1E2B2D9000F11EDB /* GameScene.swift */,
 				C6C756191E2B2DAA00F11EDB /* Nodes.swift */,
@@ -225,6 +228,7 @@
 				C6C756151E2B2D9000F11EDB /* GameScene.swift in Sources */,
 				C6C756031E2B2D2E00F11EDB /* AppDelegate.swift in Sources */,
 				C66C3CFC1E2BE65F00024C5D /* UpgradeScene.swift in Sources */,
+				C66CB0491E302AEA00844046 /* UpgradeCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

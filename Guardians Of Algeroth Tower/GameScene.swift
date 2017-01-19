@@ -10,28 +10,41 @@ import SpriteKit
 import GameplayKit
 import UIKit
 
+struct Artifacts {
+    static var PlayerCoins: Int = 0
+}
 
 class GameScene: SKScene {
-    
     
     var upgradesNode: SKSpriteNode!
     var playNode: SKSpriteNode!
     var coinsEarned: Int?
+    var coinsImage: SKSpriteNode!
+    var myCoinsLbl: SKLabelNode!
 //    var pauseNode: SKSpriteNode!
 //    var vc: UIViewController!
     
 //    @IBOutlet weak var upgradeBtn: SKSpriteNode!
     
     override func didMove(to view: SKView) {
+        
         upgradesNode = childNode(withName: "upgrades") as! SKSpriteNode!
         upgradesNode.name = "upgradeMe"
         playNode = childNode(withName: "play") as! SKSpriteNode!
         playNode.name = "play"
-//        pauseNode = childNode(withName: "pause") as! SKSpriteNode!
-//        pauseNode.name = "pause"
+        coinsImage = childNode(withName: "coins") as! SKSpriteNode!
         
-        
-        
+        myCoinsLbl = SKLabelNode()
+        myCoinsLbl.position = CGPoint(x: coinsImage.position.x - 100, y: coinsImage.position.y)
+        myCoinsLbl.fontColor = .white
+        myCoinsLbl.color = .clear
+        myCoinsLbl.horizontalAlignmentMode = .center
+        myCoinsLbl.verticalAlignmentMode = .center
+        myCoinsLbl.fontName = "Palatino"
+        myCoinsLbl.fontSize = 40.0
+        self.addChild(myCoinsLbl)
+        myCoinsLbl.text = "\(Artifacts.PlayerCoins)"
+        self.reloadInputViews()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -78,6 +91,7 @@ class GameScene: SKScene {
             let doors = SKTransition.doorway(withDuration: 1.0)
             let playScene = PlayScene(fileNamed: "PlayScene")
             playScene?.scaleMode = .aspectFill
+//            playScene?.coins = Artifacts.PlayerCoins
             self.view?.presentScene(playScene!, transition: doors)
         })
 
