@@ -21,12 +21,24 @@ class GameScene: SKScene {
     var coinsEarned: Int?
     var coinsImage: SKSpriteNode!
     var myCoinsLbl: SKLabelNode!
+    
+    var dragon: Dragon!
 //    var pauseNode: SKSpriteNode!
 //    var vc: UIViewController!
     
 //    @IBOutlet weak var upgradeBtn: SKSpriteNode!
     
     override func didMove(to view: SKView) {
+        let userInfo = UserDefaults.standard
+        
+        if let myDamage = userInfo.string(forKey: "damage") {
+            print("DAMAGE: \(myDamage)")
+        }
+        
+//        var dragon = Dragon()
+//        var goblin = Enemy()
+//        
+//        print(goblin.coinsGiven, goblin.hp, goblin.texture!, goblin.color)
         
         upgradesNode = childNode(withName: "upgrades") as! SKSpriteNode!
         upgradesNode.name = "upgradeMe"

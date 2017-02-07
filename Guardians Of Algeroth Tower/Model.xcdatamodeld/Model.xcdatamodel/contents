@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="15G31" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="TowerUpgrades" representedClassName="TowerUpgrades" syncable="YES" codeGenerationType="class">
+        <attribute name="design" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="hitPoints" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="Upgrades" representedClassName="Upgrades" syncable="YES" codeGenerationType="class">
+        <attribute name="bouncy" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="damage" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="design" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="force" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="radius" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="TowerUpgrades" positionX="-63" positionY="18" width="128" height="75"/>
+        <element name="Upgrades" positionX="-63" positionY="-18" width="128" height="120"/>
+    </elements>
+</model>

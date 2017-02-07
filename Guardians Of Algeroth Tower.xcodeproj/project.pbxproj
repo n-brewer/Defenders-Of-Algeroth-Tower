@@ -13,6 +13,14 @@
 		C66C3D011E2C67D000024C5D /* Coins.png in Resources */ = {isa = PBXBuildFile; fileRef = C66C3D001E2C67D000024C5D /* Coins.png */; };
 		C66CB0471E2F2B2B00844046 /* particle0.png in Resources */ = {isa = PBXBuildFile; fileRef = C66CB0461E2F2B2B00844046 /* particle0.png */; };
 		C66CB0491E302AEA00844046 /* UpgradeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66CB0481E302AEA00844046 /* UpgradeCell.swift */; };
+		C6781C9B1E30665400D13DB1 /* barbackground.png in Resources */ = {isa = PBXBuildFile; fileRef = C6781C991E30665400D13DB1 /* barbackground.png */; };
+		C6781C9C1E30665400D13DB1 /* healtbar.png in Resources */ = {isa = PBXBuildFile; fileRef = C6781C9A1E30665400D13DB1 /* healtbar.png */; };
+		C6781CA01E3428A700D13DB1 /* MyFortress.png in Resources */ = {isa = PBXBuildFile; fileRef = C6781C9F1E3428A600D13DB1 /* MyFortress.png */; };
+		C6781CA21E34393F00D13DB1 /* flyingDragon.png in Resources */ = {isa = PBXBuildFile; fileRef = C6781CA11E34393F00D13DB1 /* flyingDragon.png */; };
+		C6781CA41E344C0300D13DB1 /* GameOverVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6781CA31E344C0300D13DB1 /* GameOverVC.swift */; };
+		C6781CA61E3C2BF000D13DB1 /* walk.atlas in Resources */ = {isa = PBXBuildFile; fileRef = C6781CA51E3C2BEF00D13DB1 /* walk.atlas */; };
+		C6781CA81E3ED7A800D13DB1 /* smoke.sks in Resources */ = {isa = PBXBuildFile; fileRef = C6781CA71E3ED7A800D13DB1 /* smoke.sks */; };
+		C6781CAB1E40416200D13DB1 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C6781CA91E40416200D13DB1 /* Model.xcdatamodeld */; };
 		C6C755A31E29B8AD00F11EDB /* Archer Tower.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C755A01E29B8AD00F11EDB /* Archer Tower.png */; };
 		C6C755A41E29B8AD00F11EDB /* GameBG.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C755A11E29B8AD00F11EDB /* GameBG.png */; };
 		C6C755A91E29D8C400F11EDB /* GoblinTest.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C755A81E29D8C400F11EDB /* GoblinTest.png */; };
@@ -21,7 +29,7 @@
 		C6C756031E2B2D2E00F11EDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C756021E2B2D2E00F11EDB /* AppDelegate.swift */; };
 		C6C7560A1E2B2D6C00F11EDB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6C756081E2B2D6C00F11EDB /* LaunchScreen.storyboard */; };
 		C6C7560B1E2B2D6C00F11EDB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6C756091E2B2D6C00F11EDB /* Main.storyboard */; };
-		C6C756121E2B2D9000F11EDB /* Castle.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C7560C1E2B2D9000F11EDB /* Castle.png */; };
+		C6C756121E2B2D9000F11EDB /* keep.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C7560C1E2B2D9000F11EDB /* keep.png */; };
 		C6C756141E2B2D9000F11EDB /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C6C7560E1E2B2D9000F11EDB /* GameScene.sks */; };
 		C6C756151E2B2D9000F11EDB /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C7560F1E2B2D9000F11EDB /* GameScene.swift */; };
 		C6C756161E2B2D9000F11EDB /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C756101E2B2D9000F11EDB /* GameViewController.swift */; };
@@ -31,6 +39,7 @@
 		C6C7561F1E2B2DAA00F11EDB /* PlayScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C7561B1E2B2DAA00F11EDB /* PlayScene.swift */; };
 		C6C7562B1E2B324800F11EDB /* Play.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C7562A1E2B324800F11EDB /* Play.png */; };
 		C6C7562D1E2B335000F11EDB /* Upgrades.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C7562C1E2B335000F11EDB /* Upgrades.png */; };
+		C6E65DEF1E4961D1008B1822 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E65DEE1E4961D1008B1822 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +49,14 @@
 		C66C3D001E2C67D000024C5D /* Coins.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Coins.png; sourceTree = "<group>"; };
 		C66CB0461E2F2B2B00844046 /* particle0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = particle0.png; sourceTree = "<group>"; };
 		C66CB0481E302AEA00844046 /* UpgradeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpgradeCell.swift; sourceTree = "<group>"; };
+		C6781C991E30665400D13DB1 /* barbackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barbackground.png; sourceTree = "<group>"; };
+		C6781C9A1E30665400D13DB1 /* healtbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = healtbar.png; sourceTree = "<group>"; };
+		C6781C9F1E3428A600D13DB1 /* MyFortress.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MyFortress.png; sourceTree = "<group>"; };
+		C6781CA11E34393F00D13DB1 /* flyingDragon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flyingDragon.png; sourceTree = "<group>"; };
+		C6781CA31E344C0300D13DB1 /* GameOverVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverVC.swift; sourceTree = "<group>"; };
+		C6781CA51E3C2BEF00D13DB1 /* walk.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = walk.atlas; sourceTree = "<group>"; };
+		C6781CA71E3ED7A800D13DB1 /* smoke.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = smoke.sks; sourceTree = "<group>"; };
+		C6781CAA1E40416200D13DB1 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		C6C755641E29B52100F11EDB /* Guardians Of Algeroth Tower.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Guardians Of Algeroth Tower.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6C755A01E29B8AD00F11EDB /* Archer Tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Archer Tower.png"; sourceTree = "<group>"; };
 		C6C755A11E29B8AD00F11EDB /* GameBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GameBG.png; sourceTree = "<group>"; };
@@ -49,7 +66,7 @@
 		C6C756021E2B2D2E00F11EDB /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C6C756081E2B2D6C00F11EDB /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C6C756091E2B2D6C00F11EDB /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		C6C7560C1E2B2D9000F11EDB /* Castle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castle.png; sourceTree = "<group>"; };
+		C6C7560C1E2B2D9000F11EDB /* keep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keep.png; sourceTree = "<group>"; };
 		C6C7560E1E2B2D9000F11EDB /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		C6C7560F1E2B2D9000F11EDB /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		C6C756101E2B2D9000F11EDB /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -59,6 +76,7 @@
 		C6C7561B1E2B2DAA00F11EDB /* PlayScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayScene.swift; sourceTree = "<group>"; };
 		C6C7562A1E2B324800F11EDB /* Play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Play.png; sourceTree = "<group>"; };
 		C6C7562C1E2B335000F11EDB /* Upgrades.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Upgrades.png; sourceTree = "<group>"; };
+		C6E65DEE1E4961D1008B1822 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,10 +123,16 @@
 				C6C7562A1E2B324800F11EDB /* Play.png */,
 				C6C7562C1E2B335000F11EDB /* Upgrades.png */,
 				C6C755A81E29D8C400F11EDB /* GoblinTest.png */,
-				C6C7560C1E2B2D9000F11EDB /* Castle.png */,
+				C6C7560C1E2B2D9000F11EDB /* keep.png */,
+				C6781C9F1E3428A600D13DB1 /* MyFortress.png */,
 				C6C755A01E29B8AD00F11EDB /* Archer Tower.png */,
 				C6C755A11E29B8AD00F11EDB /* GameBG.png */,
+				C6781C991E30665400D13DB1 /* barbackground.png */,
+				C6781C9A1E30665400D13DB1 /* healtbar.png */,
+				C6781CA11E34393F00D13DB1 /* flyingDragon.png */,
+				C6781CA51E3C2BEF00D13DB1 /* walk.atlas */,
 				C6643A2E1E2DD6B300B67504 /* MyTileSet.sks */,
+				C6781CA71E3ED7A800D13DB1 /* smoke.sks */,
 			);
 			name = "Support Files";
 			sourceTree = "<group>";
@@ -121,6 +145,7 @@
 				C6C756021E2B2D2E00F11EDB /* AppDelegate.swift */,
 				C6C756081E2B2D6C00F11EDB /* LaunchScreen.storyboard */,
 				C6C756091E2B2D6C00F11EDB /* Main.storyboard */,
+				C6E65DEE1E4961D1008B1822 /* Constants.swift */,
 				C66C3CFB1E2BE65F00024C5D /* UpgradeScene.swift */,
 				C66CB0481E302AEA00844046 /* UpgradeCell.swift */,
 				C6C7560E1E2B2D9000F11EDB /* GameScene.sks */,
@@ -129,9 +154,11 @@
 				C6C7561A1E2B2DAA00F11EDB /* PlayScene.sks */,
 				C6C7561B1E2B2DAA00F11EDB /* PlayScene.swift */,
 				C6C756101E2B2D9000F11EDB /* GameViewController.swift */,
+				C6781CA31E344C0300D13DB1 /* GameOverVC.swift */,
 				C6C756181E2B2DAA00F11EDB /* Info.plist */,
 				C6C755D61E2AA1D000F11EDB /* Assets.xcassets */,
 				C66C3D001E2C67D000024C5D /* Coins.png */,
+				C6781CA91E40416200D13DB1 /* Model.xcdatamodeld */,
 			);
 			path = "Guardians Of Algeroth Tower";
 			sourceTree = "<group>";
@@ -196,18 +223,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6781C9B1E30665400D13DB1 /* barbackground.png in Resources */,
 				C6C7561C1E2B2DAA00F11EDB /* Info.plist in Resources */,
 				C6C755A31E29B8AD00F11EDB /* Archer Tower.png in Resources */,
+				C6781CA21E34393F00D13DB1 /* flyingDragon.png in Resources */,
 				C6C7562D1E2B335000F11EDB /* Upgrades.png in Resources */,
 				C6C7560B1E2B2D6C00F11EDB /* Main.storyboard in Resources */,
 				C66CB0471E2F2B2B00844046 /* particle0.png in Resources */,
 				C6C756011E2B2D1B00F11EDB /* Action.sks in Resources */,
 				C6C7561E1E2B2DAA00F11EDB /* PlayScene.sks in Resources */,
-				C6C756121E2B2D9000F11EDB /* Castle.png in Resources */,
+				C6781CA01E3428A700D13DB1 /* MyFortress.png in Resources */,
+				C6C756121E2B2D9000F11EDB /* keep.png in Resources */,
 				C6C7560A1E2B2D6C00F11EDB /* LaunchScreen.storyboard in Resources */,
 				C6C7562B1E2B324800F11EDB /* Play.png in Resources */,
 				C6C755EF1E2AA1D000F11EDB /* Assets.xcassets in Resources */,
+				C6781CA61E3C2BF000D13DB1 /* walk.atlas in Resources */,
+				C6781C9C1E30665400D13DB1 /* healtbar.png in Resources */,
 				C6C755A41E29B8AD00F11EDB /* GameBG.png in Resources */,
+				C6781CA81E3ED7A800D13DB1 /* smoke.sks in Resources */,
 				C6643A2F1E2DD6B300B67504 /* MyTileSet.sks in Resources */,
 				C6C755A91E29D8C400F11EDB /* GoblinTest.png in Resources */,
 				C66C3D011E2C67D000024C5D /* Coins.png in Resources */,
@@ -224,8 +257,11 @@
 			files = (
 				C6C756161E2B2D9000F11EDB /* GameViewController.swift in Sources */,
 				C6C7561F1E2B2DAA00F11EDB /* PlayScene.swift in Sources */,
+				C6781CA41E344C0300D13DB1 /* GameOverVC.swift in Sources */,
 				C6C7561D1E2B2DAA00F11EDB /* Nodes.swift in Sources */,
 				C6C756151E2B2D9000F11EDB /* GameScene.swift in Sources */,
+				C6E65DEF1E4961D1008B1822 /* Constants.swift in Sources */,
+				C6781CAB1E40416200D13DB1 /* Model.xcdatamodeld in Sources */,
 				C6C756031E2B2D2E00F11EDB /* AppDelegate.swift in Sources */,
 				C66C3CFC1E2BE65F00024C5D /* UpgradeScene.swift in Sources */,
 				C66CB0491E302AEA00844046 /* UpgradeCell.swift in Sources */,
@@ -378,6 +414,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		C6781CA91E40416200D13DB1 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C6781CAA1E40416200D13DB1 /* Model.xcdatamodel */,
+			);
+			currentVersion = C6781CAA1E40416200D13DB1 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = C6C7555C1E29B52100F11EDB /* Project object */;
 }

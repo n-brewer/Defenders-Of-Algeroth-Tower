@@ -22,7 +22,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="zJi-hv-nOt">
+                            <segmentedControl opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="zJi-hv-nOt">
                                 <rect key="frame" x="20" y="28" width="250" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="J3y-o4-BRl"/>
@@ -34,7 +34,7 @@
                                 </segments>
                                 <color key="tintColor" red="0.1176470588" green="0.41568627450000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
-                                    <action selector="upgradeOptions:" destination="o8P-Xn-j2F" eventType="touchUpInside" id="WvO-Ea-eu3"/>
+                                    <action selector="segmentThis:" destination="o8P-Xn-j2F" eventType="valueChanged" id="rtB-9n-il6"/>
                                 </connections>
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eHZ-gQ-Q9W">
@@ -59,7 +59,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="611" height="100"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GKj-Kv-9uj" id="Vzd-aH-U8N">
-                                                    <rect key="frame" x="0.0" y="0.0" width="611" height="99"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="611" height="100"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BouncyBullet" translatesAutoresizingMaskIntoConstraints="NO" id="11E-fy-beE">
@@ -75,8 +75,8 @@
                                                             <color key="textColor" red="0.20392156862745098" green="0.39215686274509803" blue="0.51764705882352935" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Purchased!" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v6S-d4-Ods">
-                                                            <rect key="frame" x="498" y="37.5" width="105" height="23.5"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v6S-d4-Ods">
+                                                            <rect key="frame" x="603" y="49.5" width="0.0" height="0.0"/>
                                                             <fontDescription key="fontDescription" name="Palatino-Bold" family="Palatino" pointSize="21"/>
                                                             <color key="textColor" red="0.26820603953574046" green="0.5490196078431373" blue="0.13067237990047714" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -164,15 +164,101 @@
                     </view>
                     <connections>
                         <outlet property="gameView" destination="gXM-Zh-a60" id="v6v-BJ-JH7"/>
+                        <outlet property="myTableView" destination="7He-TM-cEr" id="gan-Js-t3r"/>
                         <outlet property="purchasedLbl" destination="Myh-0b-L65" id="bVf-KI-vee"/>
+                        <outlet property="segmentControl" destination="zJi-hv-nOt" id="VBV-z8-6ZQ"/>
                         <outlet property="shopView" destination="eHZ-gQ-Q9W" id="zrl-Of-7gx"/>
-                        <outlet property="tableView" destination="7He-TM-cEr" id="miG-Y3-LZv"/>
                         <outlet property="totalCoins" destination="uNy-JF-sW0" id="jEp-a2-o1d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R8w-zL-6n4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-694.00299850074964" y="133.59999999999999"/>
+        </scene>
+        <!--Game OverVC-->
+        <scene sceneID="B2i-uw-SB6">
+            <objects>
+                <viewController storyboardIdentifier="GameOver" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" useStoryboardIdentifierAsRestorationIdentifier="YES" id="rdh-3G-Wiv" customClass="GameOverVC" customModule="Guardians_Of_Algeroth_Tower" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="8uj-Sp-SZM"/>
+                        <viewControllerLayoutGuide type="bottom" id="HV9-Vn-oT4"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="6LN-fu-zDa" customClass="SKView">
+                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JQg-A8-eAt">
+                                <rect key="frame" x="133" y="87" width="400" height="200"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Game-Over" translatesAutoresizingMaskIntoConstraints="NO" id="Tup-xc-2o6">
+                                        <rect key="frame" x="100" y="8" width="200" height="62"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="kXn-oV-eUM"/>
+                                        </constraints>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u4C-HB-luR">
+                                        <rect key="frame" x="100" y="97.5" width="90" height="45"/>
+                                        <color key="backgroundColor" red="0.86274509799999999" green="0.70980392160000005" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="90" id="Hfm-0s-JbW"/>
+                                            <constraint firstAttribute="height" constant="45" id="xjm-De-owf"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Palatino-Roman" family="Palatino" pointSize="27"/>
+                                        <size key="titleShadowOffset" width="1" height="1"/>
+                                        <state key="normal" title="Retry">
+                                            <color key="titleColor" red="0.31764705882352939" green="0.19215686274509802" blue="0.53333333333333333" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="retryBtnTapped:" destination="rdh-3G-Wiv" eventType="touchUpInside" id="QJz-B1-iX6"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Pc-Pc-fFS">
+                                        <rect key="frame" x="210" y="97.5" width="90" height="45"/>
+                                        <color key="backgroundColor" red="0.86274509799999999" green="0.70980392160000005" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="45" id="AgJ-tr-uBO"/>
+                                            <constraint firstAttribute="width" constant="90" id="Vwk-2A-tmP"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Palatino-Roman" family="Palatino" pointSize="27"/>
+                                        <size key="titleShadowOffset" width="1" height="1"/>
+                                        <state key="normal" title="Home">
+                                            <color key="titleColor" red="0.31764705882352939" green="0.19215686274509802" blue="0.53333333333333333" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.7843137255" green="0.63137254899999995" blue="0.2274509804" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="4Pc-Pc-fFS" firstAttribute="trailing" secondItem="Tup-xc-2o6" secondAttribute="trailing" id="8PY-Gs-04d"/>
+                                    <constraint firstItem="u4C-HB-luR" firstAttribute="centerY" secondItem="JQg-A8-eAt" secondAttribute="centerY" constant="20" id="9aE-Ay-gZz"/>
+                                    <constraint firstItem="u4C-HB-luR" firstAttribute="leading" secondItem="Tup-xc-2o6" secondAttribute="leading" id="EF3-ax-xKL"/>
+                                    <constraint firstAttribute="width" constant="400" id="GND-7m-EHu"/>
+                                    <constraint firstItem="Tup-xc-2o6" firstAttribute="centerX" secondItem="JQg-A8-eAt" secondAttribute="centerX" id="Nrg-d6-q3G"/>
+                                    <constraint firstAttribute="height" constant="200" id="RJ1-tc-DI2"/>
+                                    <constraint firstItem="Tup-xc-2o6" firstAttribute="top" secondItem="JQg-A8-eAt" secondAttribute="top" constant="8" id="aXL-vA-SNc"/>
+                                    <constraint firstItem="4Pc-Pc-fFS" firstAttribute="centerY" secondItem="JQg-A8-eAt" secondAttribute="centerY" constant="20" id="ugK-xJ-EHu"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.25" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="JQg-A8-eAt" firstAttribute="centerY" secondItem="6LN-fu-zDa" secondAttribute="centerY" id="StO-PP-a4e"/>
+                            <constraint firstItem="JQg-A8-eAt" firstAttribute="centerX" secondItem="6LN-fu-zDa" secondAttribute="centerX" id="YVB-7a-0bh"/>
+                        </constraints>
+                    </view>
+                    <value key="contentSizeForViewInPopover" type="size" width="400" height="200"/>
+                    <connections>
+                        <outlet property="actionView" destination="JQg-A8-eAt" id="3cO-Nd-vNW"/>
+                        <outlet property="bgView" destination="JQg-A8-eAt" id="z9g-sP-TSb"/>
+                        <outlet property="homeBtn" destination="4Pc-Pc-fFS" id="BT7-e2-ahr"/>
+                        <outlet property="myView" destination="6LN-fu-zDa" id="nIt-pV-G1H"/>
+                        <outlet property="retryBtn" destination="u4C-HB-luR" id="CuN-L4-ZpO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nR6-hZ-sIy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-273.01349325337333" y="972"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="Kc2-HK-MD2">
@@ -185,16 +271,44 @@
                     <view key="view" contentMode="scaleToFill" id="RKg-pM-gVc" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UnK-HG-Hba">
+                                <rect key="frame" x="36" y="172" width="82" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="u86-Id-bVm"/>
+                                </constraints>
+                                <state key="normal" title="Player Stats"/>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x3J-h4-pHk">
+                                <rect key="frame" x="56" y="210" width="42" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="dYp-SN-hE5"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="x3J-h4-pHk" firstAttribute="top" secondItem="UnK-HG-Hba" secondAttribute="bottom" constant="8" id="Gwq-SL-NbD"/>
+                            <constraint firstItem="UnK-HG-Hba" firstAttribute="leading" secondItem="RKg-pM-gVc" secondAttribute="leadingMargin" constant="16" id="JJ1-fh-YIZ"/>
+                            <constraint firstItem="UnK-HG-Hba" firstAttribute="centerY" secondItem="RKg-pM-gVc" secondAttribute="centerY" id="OyE-gX-qfq"/>
+                            <constraint firstItem="x3J-h4-pHk" firstAttribute="leading" secondItem="RKg-pM-gVc" secondAttribute="leadingMargin" constant="36" id="dgH-aG-Yqa"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="damageLabel" destination="x3J-h4-pHk" id="tcI-ne-lgJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aX0-N6-Bae" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="155" y="97"/>
+            <point key="canvasLocation" x="154.27286356821591" y="96.799999999999997"/>
         </scene>
     </scenes>
     <resources>
         <image name="BouncyBullet" width="300" height="300"/>
         <image name="Coins" width="288" height="288"/>
+        <image name="Game-Over" width="395" height="62"/>
     </resources>
 </document>

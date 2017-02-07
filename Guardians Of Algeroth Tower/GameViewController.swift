@@ -11,10 +11,20 @@ import SpriteKit
 import GameplayKit
 
 class GameViewController: UIViewController {
+    
+    @IBOutlet weak var damageLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let stats = UserDefaults.standard
+        let damage = stats.value(forKey: "damage")
+        damageLabel.text = "Damage: \(damage!)"
+        
+        let myView = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        myView.backgroundColor = UIColor.red
+        self.view.addSubview(myView)
+            
         // Load 'GameScene.sks' as a GKScene. This provides gameplay related content
         // including entities and graphs.
         if let scene = GKScene(fileNamed: "GameScene") {

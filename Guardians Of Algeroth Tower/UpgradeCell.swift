@@ -24,11 +24,12 @@ class UpgradeCell: UITableViewCell {
         upgradeImg.clipsToBounds = true
     }
     
-    func configureCell(image: String, title: String, status: String) {
+    func configureCell(image: String, title: String) {
         let img = UIImage(named: image)
         upgradeImg.image = img
         upgradeTitle.text = title
-        purchaseStatus.text = status
+//        purchaseStatus.text = status
+        
     }
 
 }

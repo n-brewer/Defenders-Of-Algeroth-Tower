@@ -8,12 +8,8 @@
 
 import UIKit
 import SpriteKit
-
-struct NodeCategory {
-    static let enemy: UInt32 = 0x1 << 0
-    static let tower: UInt32 = 0x1 << 1
-    static let projectile: UInt32 = 0x1 << 2
-}
+import GameplayKit
+import CoreData
 
 struct CategoryForNode: OptionSet {
     let rawValue: UInt32
@@ -24,8 +20,8 @@ struct CategoryForNode: OptionSet {
     static let enemy  = CategoryForNode(rawValue: 0b001)
     static let projectile = CategoryForNode(rawValue: 0b010)
     static let tower = CategoryForNode(rawValue: 0b100)
+    static let health = CategoryForNode(rawValue: 0b011)
 }
-
 
 class PlayScene: SKScene, SKPhysicsContactDelegate {
     
@@ -44,28 +40,92 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var gameTimer: Timer!
     var enemyAttackTimer: Timer!
     var homeBtn: SKLabelNode!
-//    var skullMan: Enemy!
+    var healthBar: HealthBar!
+    var enemiesLeft: Int!
+    var dragon: Dragon!
     
+    var smokeSignal = false
+    var waveLbl: SKLabelNode!
+    var index: Int!
+    var numberOfEnemies: Int!
+    var possibleEnemy = [Enemy]()
     
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+
     struct ProjectileSettings {
-        static var pRadius = CGFloat(10)
+        static var pRadius = Int(10)
         static let pSnapLimit = CGFloat(10)
-        static let pTouchLimit = CGFloat(10)
-        static let rangeLimit = CGFloat(50)
-        static var forceMultiplier = CGFloat(0.5)
+        static let pTouchLimit = CGFloat(20)
+        static let rangeLimit = CGFloat(80)
+        static var forceMultiplier = CGFloat(0.25)
         static var isBouncy: Bool = false
         static var damage: Int = 1
-//        static var collisionMask: UInt32 = 1
+        static var design: SKTexture = SKTexture(imageNamed: "Cannonball")
     }
     
     struct TowerSettings {
         static var towerImage = SKTexture(imageNamed: "Archer Tower.png")
-        static var keepImage = SKTexture(imageNamed: "Castle.png")
-        static var fortressImage = SKTexture(imageNamed: "Fortress.png")
+        static var towerHp: Int = 50
     }
 
     override func didMove(to view: SKView) {
         
+        let userStats = UserDefaults.standard
+        if let isBouncy = userStats.value(forKey: "bouncy") {
+            ProjectileSettings.isBouncy = isBouncy as! Bool
+        }
+        if let myDamage = userStats.value(forKey: "damage") {
+            ProjectileSettings.damage = myDamage as! Int
+        }
+        if let theRadius = userStats.value(forKey: "radius") {
+            ProjectileSettings.pRadius = theRadius as! Int
+        }
+        if let myForce = userStats.value(forKey: "force") {
+            ProjectileSettings.forceMultiplier = myForce as! CGFloat
+        }
+        if let towerHp = userStats.value(forKey: Stats.towerHp) {
+            TowerSettings.towerHp = towerHp as! Int
+        }
+        //        let specific = NSFetchRequest<NSFetchRequestResult>(entityName: "Upgrades")
+//        let all = try! appDelegate.context.execute(specific) as! [Upgrades]
+//        for each in all {
+//            appDelegate.context.delete(each)
+//        }
+//        if let myUpgrades = try? appDelegate.context.fetch(Upgrades.fetch) {
+//            for each in myUpgrades {
+//                appDelegate.context.delete(each)
+//                print(each.bouncy ?? "false", each.damage, each.radius)
+//                if each.damage > 0 {
+//                    ProjectileSettings.damage = each.damage
+//                } else {
+//                    ProjectileSettings.damage = 1
+//                }
+//                if each.bouncy != "false" {
+//                    ProjectileSettings.isBouncy = each.bouncy!
+//                } else {
+//                    ProjectileSettings.isBouncy = "false"
+//                }
+//                if each.radius > 0 {
+//                    ProjectileSettings.pRadius = each.radius
+//                } else {
+//                    ProjectileSettings.pRadius = 10
+//                }
+//                if each.force > 0 {
+//                    ProjectileSettings.forceMultiplier = CGFloat(each.force)
+//                } else {
+//                    ProjectileSettings.forceMultiplier = 0.25
+//                }
+//            }
+//        }
+        
+//        if let towerUpgrades = try? appDelegate.context.fetch(TowerUpgrades.fetch) {
+//            for each in towerUpgrades {
+//                let hp = each.hitPoints
+////            let design = each.design
+//                TowerSettings.towerHp = hp
+//            }
+//        }
+
         if coins == nil {
             coins = 0
         }
@@ -74,10 +134,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.contactDelegate = self
         setupScene()
         setupShooter()
-        startGameTime()
-        
-        
-//        wave1()
+
+        enemiesLeft = 1
+
+        testingWaveAlgorithm()
         
     }
     
@@ -86,7 +146,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         func startDragging(touchLocation: CGPoint, limit: CGFloat) -> Bool {
             let distance = fingerDistanceFromProjectile(projectileRestPosition: projectile.position , fingerPosition: touchLocation)
             
-            return distance < ProjectileSettings.pRadius + limit
+            return distance < CGFloat(ProjectileSettings.pRadius) + limit
         }
         
         if let touch = touches.first {
@@ -109,13 +169,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         if node.name == "resume" {
             self.view?.isPaused = false
-            startGameTime()
+//            startGameTime()
         }
         
         if node.name == "home" {
             returnHomeTapped()
         }
-
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -141,8 +200,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             if distance > ProjectileSettings.pSnapLimit {
                 let vectorX = touchStartingPoint.x - touchCurrentPoint.x
                 let vectorY = touchStartingPoint.y - touchCurrentPoint.y
-                projectile.physicsBody = SKPhysicsBody(circleOfRadius: ProjectileSettings.pRadius)
-                projectile.physicsBody?.applyImpulse(CGVector(dx: vectorX * ProjectileSettings.forceMultiplier, dy: vectorY * ProjectileSettings.forceMultiplier))
+                projectile.physicsBody = SKPhysicsBody(circleOfRadius: CGFloat(ProjectileSettings.pRadius))
+                projectile.physicsBody?.applyImpulse(CGVector(dx: vectorX * CGFloat(ProjectileSettings.forceMultiplier), dy: vectorY * CGFloat(ProjectileSettings.forceMultiplier)))
                 
             } else {
                 projectile.physicsBody = nil
@@ -158,6 +217,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupScene() {
+        
+        index = 0
+        numberOfEnemies = 5
         
         pauseNode = childNode(withName: "pause") as! SKSpriteNode!
         pauseNode.name = "pause"
@@ -175,18 +237,18 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(homeBtn)
 
         randomTimeInterval = 2.0
-        let towerSize: CGSize = CGSize(width: 180, height: 260)
-        let towerTexture = SKTexture(imageNamed: "Archer Tower.png")
-        tower = Tower(texture: towerTexture, color: .clear, size: towerSize, hitPoints: 500)
-//        tower = TowerSettings.towerImage
+        let towerSize: CGSize = CGSize(width: 145, height: 155)
+        let towerTexture = TowerSettings.towerImage
+        tower = Tower(texture: towerTexture, color: .clear, size: towerSize, hitPoints:(TowerSettings.towerHp))
+        tower.name = "tower"
         tower.position = CGPoint(x: (self.view?.frame.size.width)! / 1.5, y: (self.view?.frame.size.height)! / -2)
-        
-        tower.physicsBody?.isDynamic = true
+        tower.physicsBody?.isDynamic = false
         tower.physicsBody = SKPhysicsBody(circleOfRadius: tower.size.width / 2)
         tower.physicsBody?.categoryBitMask = CategoryForNode.tower.rawValue
         tower.physicsBody?.contactTestBitMask = CategoryForNode.enemy.rawValue
         tower.physicsBody?.collisionBitMask = 0
         tower.physicsBody?.affectedByGravity = false
+        tower.physicsBody?.restitution = 0.0
 
         self.addChild(tower)
         
@@ -200,7 +262,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         coinsLbl.fontSize = 40.0
         self.addChild(coinsLbl)
         coinsLbl.text = "\(Artifacts.PlayerCoins)"
-        
         
     }
     
@@ -217,14 +278,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupShooter() {
-        let shotPath = UIBezierPath(arcCenter: CGPoint.zero, radius: ProjectileSettings.pRadius, startAngle: 0, endAngle: CGFloat(M_PI * 2), clockwise: true)
+        let shotPath = UIBezierPath(arcCenter: CGPoint.zero, radius: CGFloat(ProjectileSettings.pRadius), startAngle: 0, endAngle: CGFloat(M_PI * 2), clockwise: true)
 
-        projectile = Projectile(path: shotPath, color: UIColor.red)
+        projectile = Projectile(path: shotPath, color: .white, design: ProjectileSettings.design)
         projectile.position = CGPoint(x: tower.position.x - 80, y: tower.position.y + 150)
         projectile.physicsBody?.isDynamic = true
         projectile.physicsBody?.categoryBitMask = CategoryForNode.projectile.rawValue
         projectile.physicsBody?.contactTestBitMask = CategoryForNode.enemy.rawValue
-        projectile.physicsBody?.collisionBitMask = CategoryForNode.tower.rawValue
+        projectile.physicsBody?.collisionBitMask = 0
         projectile.physicsBody?.restitution = 0.1
         projectile.physicsBody?.usesPreciseCollisionDetection = true
         projectile.physicsBody?.affectedByGravity = false
@@ -232,46 +293,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(projectile)
     }
     
-    func spawnEnemy() {
-        let minPause: UInt32 = UInt32(1)
-        let randomNumber = TimeInterval(arc4random_uniform(4) + minPause)
-        randomTimeInterval = randomNumber
-        let enemySize: CGSize = CGSize(width: 80, height: 80)
-        let design = SKTexture(imageNamed: "GoblinTest.png")
-        enemy = Enemy(texture: design , color: .cyan, size: enemySize, hitPoints: 2)
-        enemy.size = CGSize(width: 100, height: 100)
-        enemy.physicsBody = SKPhysicsBody(rectangleOf: enemy.size)
-        enemy.physicsBody?.isDynamic = true
-        enemy.physicsBody?.affectedByGravity = false
-        enemy.physicsBody?.categoryBitMask = CategoryForNode.enemy.rawValue
-        enemy.physicsBody?.contactTestBitMask = CategoryForNode.tower.rawValue
-        enemy.physicsBody?.collisionBitMask = 0
-        
-        let min = self.size.height / 8
-        let max = self.size.height / 2
-        let result = (max - min)
-        
-        let yPosition = Int((arc4random_uniform(UInt32(result) + 100)))
-        let properPlace = (yPosition * -1)
-        enemy.position = CGPoint(x: -700, y: Int(properPlace))
-        enemy.run(SKAction.move(to: CGPoint(x: tower.position.x - 120, y: tower.position.y), duration: 5.0))
-        self.addChild(enemy)
-
-        startGameTime()
-        
-    }
-    
     func didBegin(_ contact: SKPhysicsContact) {
         
         let contactCategory: CategoryForNode = [contact.bodyA.category, contact.bodyB.category]
         
-//        if contactCategory.contains([.tower, .projectile]) {
-//            if (contact.bodyA.category == .tower) && (contact.bodyB.category == .projectile) || (contact.bodyA.category == .projectile) && (contact.bodyB.category == .tower) {
-//                print("do nothing")
-//            } else {
-//                print("what the heck")
-//            }
-//            
         if contactCategory.contains([.enemy, .projectile]) {
             if contact.bodyA.category == .enemy {
                 projectileHitEnemy(projectileNode: contact.bodyB.node! as! SKShapeNode, enemyNode: contact.bodyA.node! as! Enemy)
@@ -287,38 +312,21 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         } else {
             print("whatever")
         }
-        
-        
-//        var firstBody: SKPhysicsBody
-//        var secondBody: SKPhysicsBody
-//        
-//        if (contact.bodyA.categoryBitMask) == (NodeCategory.projectile) {
-//            firstBody = contact.bodyA
-//            secondBody = contact.bodyB
-//        } else {
-//            firstBody = contact.bodyB
-//            secondBody = contact.bodyA
-//        }
-//        
-//        if (firstBody.categoryBitMask & NodeCategory.projectile) != 0  && (secondBody.categoryBitMask & NodeCategory.enemy) != 0 {
-//                projectileHitEnemy(projectileNode: firstBody.node as! SKShapeNode, enemyNode: secondBody.node as! SKSpriteNode)
-//        } else if (firstBody.categoryBitMask & NodeCategory.enemy) != 0 && (secondBody.categoryBitMask & NodeCategory.tower) != 0 {
-//                enemyAttacksTower(towerNode: firstBody.node as! SKSpriteNode, enemyNode: secondBody.node as! SKSpriteNode)
-//        }
-//
     }
     
-    
     func projectileHitEnemy(projectileNode: SKShapeNode, enemyNode: Enemy) {
+        let test = Upgrades(context: appDelegate.context)
+        print(test.bouncy, test.damage, test.radius)
         
         if ProjectileSettings.isBouncy == false {
             projectileNode.removeFromParent()
         } else {
             print("Got dem Bouncy's")
         }
-        print("\(projectileNode)")
+
         let monster = enemyNode
-        monster.hp -= ProjectileSettings.damage
+        monster.hp -= Int(ProjectileSettings.damage)
+        monster.healthbar.updateProgress(progress: CGFloat(Float(monster.hp)/2) )
         let blood = createBloodSplatter(dyingEnemy: monster).copy() as! SKEmitterNode
         self.addChild(blood )
         let firstStep = SKAction.wait(forDuration: 1.0)
@@ -327,12 +335,17 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
         blood.run(SKAction.sequence([firstStep, secondStep]))
         
-        
-        
         if monster.hp <= 0 {
             monster.removeAllActions()
             monster.removeFromParent()
-            Artifacts.PlayerCoins += 1
+            Artifacts.PlayerCoins += monster.coinsGiven
+            enemiesLeft! -= 1
+            if enemiesLeft != nil && enemiesLeft == 0 {
+                self.numberOfEnemies! += 2
+                self.index! += 1
+                
+                self.completedWave()
+            }
         } else {
             print("not dead yet")
         }
@@ -345,36 +358,32 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         let tower = towerNode
         let enemy = enemyNode
         let action = SKAction.run {
-            tower.hp -= 1
+            tower.hp -= enemy.damage
+            
+            if tower.hp <= Int(TowerSettings.towerHp / 2) && self.smokeSignal == false {
+                self.smokeSignal = true
+                var smoke = SKEmitterNode()
+                smoke = SKEmitterNode(fileNamed: "smoke.sks")!
+                smoke.position = tower.position
+                self.addChild(smoke)
+            }
+            
+            if tower.hp <= 0 {
+                let vc = GameOverVC()
+                vc.removeFromParentViewController()
+                tower.removeFromParent()
+                enemy.removeAllActions()
+                
+                self.gameOverAlert()
+            }
+
+            tower.healthbar.updateProgress(progress: CGFloat(Float(tower.hp)/Float(TowerSettings.towerHp)))
             print("HITPOINTS \(tower.hp)")
         }
+        
         let delay = SKAction.wait(forDuration: 1.0)
         let seq = SKAction.sequence([action, delay])
         enemy.run(SKAction.repeatForever(seq))
-
-        if tower.hp <= 0 {
-            tower.removeFromParent()
-            enemy.removeAllActions()
-            print("GAME OVER")
-        }
-        
-        if enemyNode.resignFirstResponder() {
-            enemyAttackTimer.invalidate()
-        }
-//        towerNode.removeFromParent()
-    }
-    
-//    func enemyAttacksWithTimer() {
-//        let theTower: Tower
-//        theTower = Tower
-////        tower.hp -= 1
-//        print("HITPOINTS: \(tower.hp)")
-//    }
-    
-    
-    func startGameTime() {
-        gameTimer = Timer.scheduledTimer(timeInterval: randomTimeInterval, target: self, selector: #selector(spawnEnemy), userInfo: nil, repeats: false)
-
     }
     
     func returnHomeTapped() {
@@ -385,9 +394,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             homeScene?.scaleMode = .aspectFill
             homeScene?.coinsEarned = self.coins
             self.view?.presentScene(homeScene!, transition: flip)
-            
         }
-
     }
     
     func createBloodSplatter(dyingEnemy: SKSpriteNode) -> SKEmitterNode {
@@ -413,7 +420,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         blood.particleRotation = 0
         blood.particleRotationRange = 0
         blood.particleRotationSpeed = 0
-        
         blood.particleColorBlendFactor = 1
         blood.particleColorBlendFactorRange = 0
         blood.particleColorBlendFactorSpeed = 0
@@ -423,17 +429,134 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         return blood
     }
 
-    
-//    func wave1(){
-//        let firstAction = SKAction.run { 
-//            self.gameTimer
-//        }
-//        let action = SKAction.repeat(firstAction, count: 3)
+//    func wave1() {
 //        
-//        self.run(action)
-//  
+//        var waitLabel: SKLabelNode!
+//        var waveArray = [SKAction]()
+//        let action = SKAction.run {
+//            
+//            self.enemiesLeft = 5
+//            var enemyArray = [SKSpriteNode]()
+//            
+//            var enemy2: SKSpriteNode!
+//            let endPoint = SKAction.move(to: CGPoint(x: 300, y: 0), duration: 7.0)
+//            self.enemy = Dragon()
+//            enemy2 = Enemy()
+//            
+//            enemyArray.append(self.enemy)
+//            enemyArray.append(enemy2)
+//            self.enemy.run(endPoint)
+//            enemy2.run(endPoint)
+//            enemyArray = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: enemyArray) as! [SKSpriteNode]
+//            self.addChild(enemyArray[0])
+//            
+//        }
+//        
+//        let lastThing = SKAction.wait(forDuration: 1.5)
+//        let all = SKAction.sequence([action, lastThing])
+//        waveArray.append(all)
+//        
+//        let action2 = SKAction.run {
+//            
+//            self.enemiesLeft = 3
+//            var enemyArray = [SKSpriteNode]()
+//            
+//            var enemy2: SKSpriteNode!
+//            let endPoint = SKAction.move(to: CGPoint(x: 300, y: 0), duration: 3.0)
+//            self.enemy = Dragon()
+//            enemy2 = Enemy()
+//            
+//            enemyArray.append(self.enemy)
+//            enemyArray.append(enemy2)
+//            self.enemy.run(endPoint)
+//            enemy2.run(endPoint)
+//            enemyArray = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: enemyArray) as! [SKSpriteNode]
+//            self.addChild(enemyArray[0])
+//            
+//        }
+//        
+//        let pauseAction = SKAction.run { 
+//            waitLabel = SKLabelNode()
+//            waitLabel.text = "WAVE 1 OVER"
+//            waitLabel.position = CGPoint(x: 0, y: 0)
+//            self.addChild(waitLabel)
+//        }
+//        
+//        let delayAction = SKAction.wait(forDuration: 5.0)
+//        let prepareNextWaveAction = SKAction.run { 
+//            waitLabel.removeFromParent()
+//        }
+//        
+//        let waveTransition = SKAction.sequence([pauseAction, delayAction, prepareNextWaveAction])
+//        
+//        let lastThing2 = SKAction.wait(forDuration: 1.5)
+//        let all2 = SKAction.sequence([action2, lastThing2])
+//        waveArray.append(all2)
+//        
+//        let runningWave1 = SKAction.repeat(all, count: 5)
+//        let runningWave2 = SKAction.repeat(all2, count: 3)
+//        let runWaveDelay = SKAction.repeat(waveTransition, count: 1)
+//        self.run(SKAction.sequence([runningWave1, runWaveDelay, runningWave2]))
 //    }
-
+    
+    func gameOverAlert() {
+        let window = UIWindow()
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "GameOver") as! GameOverVC
+        vc.removeFromParentViewController()
+        vc.view.frame.size = CGSize(width: 200, height: 200)
+        vc.view.center = CGPoint(x: window.frame.size.width / 2, y: window.frame.size.height / 2)
+        self.view?.window?.rootViewController?.present(vc, animated: true, completion: nil)
+    }
+    
+    func testingWaveAlgorithm() {
+        
+        enemiesLeft = numberOfEnemies
+        
+        let spawnAction = SKAction.run {
+            var conglomerateOfEnemies = [SKSpriteNode]()
+            var dude: SKSpriteNode!
+            var redDragon: SKSpriteNode!
+            dude = Enemy()
+            redDragon = Dragon()
+            
+            conglomerateOfEnemies.append(dude)
+            conglomerateOfEnemies.append(redDragon)
+            let indexPicked = arc4random_uniform(UInt32(self.index))
+            self.addChild(conglomerateOfEnemies[Int(indexPicked)])
+        }
+        
+        let delayAction = SKAction.wait(forDuration: 2.0)
+        
+        let actionSeq = SKAction.sequence([spawnAction, delayAction])
+        let fullWave = SKAction.repeat(actionSeq, count: numberOfEnemies)
+        
+        self.run(fullWave)
+    }
+    
+    func completedWave() {
+        
+        waveLbl = childNode(withName: "waveWon") as! SKLabelNode!
+        let displayAction = SKAction.run {
+            self.waveLbl.isHidden = false
+            self.waveLbl.text = "WAVE \(self.index!) COMPLETE!!"
+            self.waveLbl.position = CGPoint(x: 0, y: 0)
+        }
+        
+        let delayWaveAction = SKAction.wait(forDuration: 6.0)
+        
+        let prepareNextWaveAction = SKAction.run {
+            self.waveLbl.isHidden = true
+            
+        }
+        
+        let fullTransition = SKAction.sequence([displayAction, delayWaveAction, prepareNextWaveAction])
+        let runWaveDelay = SKAction.repeat(fullTransition, count: 1)
+        
+        self.run(runWaveDelay) { 
+            self.testingWaveAlgorithm()
+        }
+    }
 }
 
 
@@ -446,14 +569,24 @@ extension SKPhysicsBody {
             self.categoryBitMask = newValue.rawValue
         }
     }
-    
 }
 
+extension Upgrades {
+    
+    class var fetch: NSFetchRequest<Upgrades> {
+        return NSFetchRequest<Upgrades>(entityName: "Upgrades")
+    }
+    
+    public override var description: String {
+        return "things we have bought in store \(bouncy), \(damage)"
+    }
+}
 
+extension TowerUpgrades {
 
-
-
-
-
+    class var fetch: NSFetchRequest<TowerUpgrades> {
+        return NSFetchRequest<TowerUpgrades>(entityName: "TowerUpgrades")
+    }
+}
 
 
