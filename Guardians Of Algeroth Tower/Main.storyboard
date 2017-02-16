@@ -272,33 +272,90 @@
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UnK-HG-Hba">
-                                <rect key="frame" x="36" y="172" width="82" height="30"/>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="umf-yp-oeR">
+                                <rect key="frame" x="20" y="239" width="240" height="128"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tower HP:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x3J-h4-pHk">
+                                        <rect key="frame" x="16" y="48" width="85" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="dYp-SN-hE5"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="xUT-Mc-d9e"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Palatino-Roman" family="Palatino" pointSize="18"/>
+                                        <color key="textColor" red="0.31764705879999999" green="0.19215686269999999" blue="0.53333333329999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Damage:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cgw-q0-AHE">
+                                        <rect key="frame" x="16" y="79" width="71" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="G3U-94-whw"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="GA4-TT-4UK"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Palatino-Roman" family="Palatino" pointSize="18"/>
+                                        <color key="textColor" red="0.31764705879999999" green="0.19215686269999999" blue="0.53333333329999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UnK-HG-Hba">
+                                        <rect key="frame" x="73" y="8" width="95" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="CFU-VG-8pD"/>
+                                            <constraint firstAttribute="height" constant="30" id="u86-Id-bVm"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Palatino-BoldItalic" family="Palatino" pointSize="17"/>
+                                        <state key="normal" title="Player Stats">
+                                            <color key="titleColor" red="0.31764705879999999" green="0.19215686269999999" blue="0.53333333329999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="500" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hId-zu-cVl">
+                                        <rect key="frame" x="197" y="79" width="27" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="JOL-Bi-577"/>
+                                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="21" id="WRd-N2-n5y"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="bD3-Ok-q7N"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Palatino-Bold" family="Palatino" pointSize="18"/>
+                                        <color key="textColor" red="0.016693178959999999" green="0.1880413588" blue="0.85088141029999997" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="500" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ygT-67-qBg">
+                                        <rect key="frame" x="197" y="48" width="27" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="21" id="E3m-CZ-SVX"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="cHr-MW-ont"/>
+                                            <constraint firstAttribute="height" constant="21" id="gIc-9r-CsL"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Palatino-Bold" family="Palatino" pointSize="18"/>
+                                        <color key="textColor" red="0.016693178959999999" green="0.1880413588" blue="0.85088141029999997" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.86274509803921573" green="0.71372549019607845" blue="0.30588235294117649" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="u86-Id-bVm"/>
+                                    <constraint firstAttribute="trailing" secondItem="hId-zu-cVl" secondAttribute="trailing" constant="16" id="0o6-Uc-SAN"/>
+                                    <constraint firstAttribute="height" constant="128" id="24e-Rk-Mvh"/>
+                                    <constraint firstAttribute="trailing" secondItem="ygT-67-qBg" secondAttribute="trailing" constant="16" id="4PL-68-bjh"/>
+                                    <constraint firstAttribute="width" constant="240" id="8Jp-K1-NGB"/>
+                                    <constraint firstItem="hId-zu-cVl" firstAttribute="top" secondItem="ygT-67-qBg" secondAttribute="bottom" constant="10" id="CRv-lH-hYh"/>
+                                    <constraint firstItem="cgw-q0-AHE" firstAttribute="leading" secondItem="umf-yp-oeR" secondAttribute="leading" constant="16" id="VC3-H5-QZ5"/>
+                                    <constraint firstItem="UnK-HG-Hba" firstAttribute="top" secondItem="umf-yp-oeR" secondAttribute="top" constant="8" id="VSq-pO-4ZH"/>
+                                    <constraint firstItem="ygT-67-qBg" firstAttribute="top" secondItem="UnK-HG-Hba" secondAttribute="bottom" constant="10" id="ZoD-xn-apP"/>
+                                    <constraint firstItem="UnK-HG-Hba" firstAttribute="centerX" secondItem="umf-yp-oeR" secondAttribute="centerX" id="gk3-ed-F6K"/>
+                                    <constraint firstItem="x3J-h4-pHk" firstAttribute="top" secondItem="UnK-HG-Hba" secondAttribute="bottom" constant="10" id="jeO-Ki-sxg"/>
+                                    <constraint firstItem="cgw-q0-AHE" firstAttribute="top" secondItem="x3J-h4-pHk" secondAttribute="bottom" constant="10" id="lZJ-mz-4d1"/>
+                                    <constraint firstItem="x3J-h4-pHk" firstAttribute="leading" secondItem="umf-yp-oeR" secondAttribute="leading" constant="16" id="sl3-jQ-dSA"/>
                                 </constraints>
-                                <state key="normal" title="Player Stats"/>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x3J-h4-pHk">
-                                <rect key="frame" x="56" y="210" width="42" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="dYp-SN-hE5"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="x3J-h4-pHk" firstAttribute="top" secondItem="UnK-HG-Hba" secondAttribute="bottom" constant="8" id="Gwq-SL-NbD"/>
-                            <constraint firstItem="UnK-HG-Hba" firstAttribute="leading" secondItem="RKg-pM-gVc" secondAttribute="leadingMargin" constant="16" id="JJ1-fh-YIZ"/>
-                            <constraint firstItem="UnK-HG-Hba" firstAttribute="centerY" secondItem="RKg-pM-gVc" secondAttribute="centerY" id="OyE-gX-qfq"/>
-                            <constraint firstItem="x3J-h4-pHk" firstAttribute="leading" secondItem="RKg-pM-gVc" secondAttribute="leadingMargin" constant="36" id="dgH-aG-Yqa"/>
+                            <constraint firstItem="umf-yp-oeR" firstAttribute="leading" secondItem="RKg-pM-gVc" secondAttribute="leadingMargin" id="HWJ-NB-AXS"/>
+                            <constraint firstItem="otK-13-8zF" firstAttribute="top" secondItem="umf-yp-oeR" secondAttribute="bottom" constant="8" id="nBO-N2-usr"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="damageLabel" destination="x3J-h4-pHk" id="tcI-ne-lgJ"/>
+                        <outlet property="damageLabel" destination="hId-zu-cVl" id="pIl-RQ-8EU"/>
+                        <outlet property="statsView" destination="umf-yp-oeR" id="D1l-CC-B9T"/>
+                        <outlet property="towerHpLbl" destination="ygT-67-qBg" id="ld8-VN-r8V"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aX0-N6-Bae" userLabel="First Responder" sceneMemberID="firstResponder"/>

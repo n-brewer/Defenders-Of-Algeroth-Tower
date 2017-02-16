@@ -17,6 +17,8 @@ class UpgradeScene: UIViewController, UITableViewDelegate, UITableViewDataSource
     var statForce = "force"
     var force: Double = 0.25
     
+    var purchased = [false, false, false, false]
+    
     @IBOutlet weak var shopView: UIView!
 //    @IBOutlet weak var bouncyImage: UIImageView!
     @IBOutlet weak var totalCoins: UILabel!
@@ -31,16 +33,19 @@ class UpgradeScene: UIViewController, UITableViewDelegate, UITableViewDataSource
 //    var titles: [String]?
 //    var images: [String]?
     var status = "Buy Me!"
+    var dmgLevel: Int?
+    var moreDmgCost: Int!
     
     var projectileIsSelected = true
     var towerIsSelected = false
     
-    var projectileArray = ["Bouncy Bullets", "Mega Cannon", "Spiked Cannon"]
-    var projUpgImgs = ["BouncyBullet", "Cannonball", "spiked"]
+    var projectileArray = ["Bouncy Bullets", "Mega Cannon", "Spiked Cannon", "Damage++"]
+    var projUpgImgs = ["BouncyBullet", "Cannonball", "spiked", "Damage++"]
     var proStatusArray = ["Buy Me", "Purchased!"]
     
     var towerArray = ["Stone Keep", "Fortress of Algeroth"]
     var towerImages = ["keep", "MyFortress"]
+    var levelArray = [String]()
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
@@ -78,19 +83,23 @@ class UpgradeScene: UIViewController, UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UpgradeCell") as? UpgradeCell
 //        let cellRow = tableView.cellForRow(at: indexPath) as? UpgradeCell
-        
+        let someStats = UserDefaults.standard
+        if let damageLevel = someStats.value(forKey: Stats.damageLvl) {
+            self.dmgLevel = damageLevel as? Int
+        } else {
+            self.dmgLevel = 1
+        }
+
+        levelArray = ["", "", "", "Level \(dmgLevel!)"]
+        moreDmgCost = (dmgLevel! * 5)
             if projectileIsSelected == true {
                 let title = projectileArray[indexPath.row]
                 let image = projUpgImgs[indexPath.row]
-//                let status = proStatusArray[indexPath.row]
+                let level = levelArray[indexPath.row]
                 
-//                let myStatus = UserDefaults.standard
-//                if let stat = myStatus.string(forKey: "status") {
-//                    cellRow?.purchaseStatus.text = stat
-//                } else {
-//                    cell?.purchaseStatus.text = proStatusArray[0]
-//                }
-
+                cell?.purchaseStatus.text = level
+                
+                
                 cell?.configureCell(image: image, title: title)
 
                 return cell!
@@ -137,6 +146,7 @@ class UpgradeScene: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBAction func homeBtnTapped(_ sender: UIButton) {
 //        let scene = GKScene(fileNamed: "GameScene")
 //        let sceneNode = scene?.rootNode as! GameScene?
+//        sceneNode?.reloadInputViews()
 //        sceneNode?.scaleMode = .aspectFill
 //        sceneNode?.coinsEarned = currentCoins
 //        gameView.isHidden = false
@@ -147,48 +157,70 @@ class UpgradeScene: UIViewController, UITableViewDelegate, UITableViewDataSource
     func presentAlertView(title: String, message: String, coins: Int, index: Int, cell: UpgradeCell) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Buy for \(coins)!", style: .default, handler: { (action) in
+        alert.addAction(UIAlertAction(title: "\(coins) coins!", style: .default, handler: { (action) in
             if Artifacts.PlayerCoins >= coins {
+                let upgradeValues = UserDefaults.standard
                 Artifacts.PlayerCoins -= coins
                 self.totalCoins.text = "\(Artifacts.PlayerCoins)"
                 
                 if self.projectileIsSelected == true {
-                    let upgradeValues = UserDefaults.standard
+//                    let upgradeValues = UserDefaults.standard
                     switch index {
                     case 0:
-                        upgradeValues.set(3, forKey: self.statDamage)
                         upgradeValues.set(true, forKey: Stats.bouncy)
-                        upgradeValues.set("Purchased!", forKey: Stats.status)
-                        cell.purchaseStatus.text = upgradeValues.string(forKey: Stats.status)
+                        self.purchased[index] = true
+//                        upgradeValues.set("Purchased!", forKey: Stats.status)
+//                        cell.purchaseStatus.text = upgradeValues.string(forKey: Stats.status)
                     case 1:
                         upgradeValues.set(2, forKey: Stats.damage)
                         upgradeValues.set(20, forKey: Stats.radius)
                         upgradeValues.set(1.5, forKey: Stats.force)
-                        upgradeValues.set("Purchased!", forKey: Stats.status)
-                        cell.purchaseStatus.text = upgradeValues.string(forKey: Stats.status)
+                        self.purchased[index] = true
+//                        upgradeValues.set("Purchased!", forKey: Stats.status)
+//                        cell.purchaseStatus.text = upgradeValues.string(forKey: Stats.status)
                     case 2:
                         upgradeValues.set(3, forKey: Stats.damage)
                         upgradeValues.set(30, forKey: Stats.radius)
-                        upgradeValues.set(3, forKey: Stats.force)
-                        upgradeValues.set("Purchased!", forKey: Stats.status)
-                        cell.purchaseStatus.text = upgradeValues.string(forKey: Stats.status)
+                        upgradeValues.set(2, forKey: Stats.force)
+                        upgradeValues.set("spiked", forKey: Stats.projectileImgName)
+                        self.purchased[index] = true
+//                        upgradeValues.set("Purchased!", forKey: Stats.status)
+//                        cell.purchaseStatus.text = upgradeValues.string(forKey: Stats.status)
+                    case 3:
+                        var currentLvl = upgradeValues.integer(forKey: Stats.damageLvl)
+                        if currentLvl >= 10 {
+                            currentLvl = 10
+                        } else {
+                            let currentLvl = upgradeValues.integer(forKey: Stats.damageLvl)
+                            let newLvl = currentLvl + 1
+                            upgradeValues.set(newLvl, forKey: Stats.damageLvl)
+                            let currentDmg = upgradeValues.integer(forKey: Stats.damage)
+                            let newDmg = currentDmg + 1
+                            upgradeValues.set(newDmg, forKey: Stats.damage)
+//                            cell.purchaseStatus.text = "Level \(self.dmgLevel)"
+                        }
+                        
                     default:
                         print("bought nothin'")
                     }
                     
                 } else if self.towerIsSelected == true {
-                    let upgradeValues = UserDefaults.standard
+//                    let upgradeValues = UserDefaults.standard
                     switch index {
                     case 0:
                         PlayScene.TowerSettings.towerImage = SKTexture(imageNamed: "Castle.png")
                         upgradeValues.set(200, forKey: Stats.towerHp)
+                        self.purchased[index] = true
                     case 1:
-                        PlayScene.TowerSettings.towerImage = SKTexture(imageNamed: "MyFortress.png")
+                        upgradeValues.set("MyFortress", forKey: Stats.towerImgName)
                         upgradeValues.set(500, forKey: Stats.towerHp)
+                        self.purchased[index] = true
                     default:
                         print("bought nothin'")
                     }
                 }
+                upgradeValues.set(Artifacts.PlayerCoins, forKey: Stats.myCoins)
+                self.myTableView.reloadData()
             } else {
                 print("Get more money!")
             }
@@ -197,17 +229,34 @@ class UpgradeScene: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func upgradeSelected(index: Int, cell: UpgradeCell) {
-        
-        switch index {
-        case 0:
-            print("first Cell")
-            presentAlertView(title: "Bouncy Bullets", message: "Hit multiple enemies with these bouncing bullets!", coins: 2, index: index, cell: cell)
-        case 1:
-            presentAlertView(title: "Big Balls of Steel", message: "Bigger cannonball, more damage. Enjoy!", coins: 1, index: index, cell: cell)
-        case 2:
-            presentAlertView(title: "Big Balls of Steel, with Spikes", message: "Add spikes 'cuz why not!", coins: 1, index: index, cell: cell)
-        default:
-            print("missed something")
+        if projectileIsSelected {
+            switch index {
+            case 0:
+                print("first Cell")
+                presentAlertView(title: "Bouncy Bullets", message: "Hit multiple enemies with these bouncing bullets!", coins: 2, index: index, cell: cell)
+            case 1:
+                presentAlertView(title: "Big Balls of Steel", message: "Bigger cannonball, more damage. Enjoy!", coins: 1, index: index, cell: cell)
+            case 2:
+                presentAlertView(title: "Big Balls of Steel, with Spikes", message: "Add spikes 'cuz why not!", coins: 1, index: index, cell: cell)
+            case 3:
+                if self.dmgLevel! >= 10 {
+                    presentAlertView(title: "Maxed Out!", message: "Your damage has been maxed out", coins: 0, index: index, cell: cell)
+                } else {
+                    presentAlertView(title: "More Damage Please", message: "Like I said, more damage!", coins: self.moreDmgCost, index: index, cell: cell)
+                }
+                
+            default:
+                print("missed something")
+            }
+        } else if towerIsSelected {
+            switch index {
+            case 0:
+                presentAlertView(title: "Stone Keep", message: "200 hp for this stone tower.", coins: 1, index: index, cell: cell)
+            case 1:
+                presentAlertView(title: "Algeroth Tower", message: "500 hp and the glory of Algeroth!", coins: 1, index: index, cell: cell)
+            default:
+                print("something went wrong here")
+            }
         }
     }
     
