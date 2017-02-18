@@ -78,7 +78,7 @@ class Enemy: SKSpriteNode {
 //        let properPlace = (yPosition * 1)
         let window = UIWindow()
         self.position = CGPoint(x: -700, y: window.frame.size.height / -2)
-        self.run(SKAction.move(to: CGPoint(x: (window.frame.size.width / 1.5) - 100, y: window.frame.size.height / -2), duration: 7.0))
+        self.run(SKAction.move(to: CGPoint(x: (window.frame.size.width / 1.5) - 150, y: window.frame.size.height / -2), duration: 7.0))
         
 //        prepareForNextWave()
         
@@ -120,13 +120,46 @@ class Dragon: Enemy {
         let properPlace = (yPosition * 1)
         let window = UIWindow()
         self.position = CGPoint(x: -700, y: properPlace)
-        self.run(SKAction.move(to: CGPoint(x: (window.frame.size.width / 1.5) - 100, y: (window.frame.size.height / -2) + 100), duration: 10.0))
+        self.run(SKAction.move(to: CGPoint(x: (window.frame.size.width / 1.5) - 150, y: (window.frame.size.height / -2) + 100), duration: 10.0))
         
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+class Ogre: Enemy {
+    
+    var ogreAtlas: SKTextureAtlas!
+    var ogreArray = [SKTexture]()
+    
+    override init(texture: SKTexture?, color: UIColor, size: CGSize?, hitPoints: Double, coinsEarned: Int, dmg damage: Double) {
+        
+        ogreAtlas = SKTextureAtlas(named: "OgreWalk.atlas")
+        
+        for i in 1...ogreAtlas.textureNames.count {
+            let name = "Ogre\(i)"
+            ogreArray.append(SKTexture(imageNamed: name))
+        }
+
+        
+        super.init(texture: texture, color: color, size: size, hitPoints: hitPoints, coinsEarned: coinsEarned, dmg: damage)
+        
+    }
+    
+    convenience init() {
+        self.init(texture: SKTexture(imageNamed: "Ogre1.png"), color: .clear, size: CGSize(width: 180, height: 200), hitPoints: 15, coinsEarned: 6, dmg: 10)
+        self.run(SKAction.repeatForever(SKAction.animate(with: ogreArray, timePerFrame: 0.1)))
+        let window = UIWindow()
+        self.position = CGPoint(x: -700, y: window.frame.size.height / -2.5)
+        self.run(SKAction.move(to: CGPoint(x: (window.frame.size.width / 1.5) - 130, y: window.frame.size.height / -2), duration: 10.0))
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
 }
 
 class Tower: SKSpriteNode {

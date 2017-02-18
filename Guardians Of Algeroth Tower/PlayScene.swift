@@ -53,8 +53,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var numberOfEnemies: Int!
     var possibleEnemy = [Enemy]()
     
-    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-
+    var waveNumber: Int!
+    
     struct ProjectileSettings {
         static var pRadius = Int(10)
         static let pSnapLimit = CGFloat(10)
@@ -69,6 +69,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     struct TowerSettings {
         static var towerImage = SKTexture(imageNamed: "Archer Tower.png")
         static var towerHp: Double = 100
+    }
+    
+    struct WaveSettings {
+        static var waveNumber: Int = 1
     }
 
     override func didMove(to view: SKView) {
@@ -268,8 +272,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func projectileHitEnemy(projectileNode: SKShapeNode, enemyNode: Enemy) {
-        let test = Upgrades(context: appDelegate.context)
-        print(test.bouncy, test.damage, test.radius)
+//        let test = Upgrades(context: appDelegate.context)
+//        print(test.bouncy, test.damage, test.radius)
         
 //        if ProjectileSettings.isBouncy == false {
 //            projectileNode.removeFromParent()
@@ -296,13 +300,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             enemiesLeft! -= 1
             if enemiesLeft != nil && enemiesLeft == 0 {
                 self.numberOfEnemies! += 2
-                self.index! += 1
+//                self.index! += 1
                 
                 self.completedWave()
             }
             
-            if index >= 2 {
-                index = 2
+            if index >= 3 {
+                index = 3
             }
         } else {
             print("not dead yet")
@@ -405,13 +409,16 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             var conglomerateOfEnemies = [SKSpriteNode]()
             var dude: SKSpriteNode!
             var redDragon: SKSpriteNode!
+            var ogre: SKSpriteNode!
             dude = Enemy(hitPoints: self.customHp, dmg: self.customDmg, speed: self.customSpeed)
             redDragon = Dragon()
+            ogre = Ogre()
             dude.speed = self.customSpeed
             
             
             conglomerateOfEnemies.append(dude)
             conglomerateOfEnemies.append(redDragon)
+            conglomerateOfEnemies.append(ogre)
             let indexPicked = arc4random_uniform(UInt32(self.index))
             self.addChild(conglomerateOfEnemies[Int(indexPicked)])
         }
@@ -433,11 +440,19 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         let userStats = UserDefaults.standard
         userStats.set(Artifacts.PlayerCoins, forKey: Stats.myCoins)
+        let wave = userStats.value(forKey: Stats.wave) as! Int
+        let newWave = wave + 1
+        
+        userStats.set(newWave, forKey: Stats.wave)
+        
+        if wave % 3 == 0 {
+            index! += 1.0
+        }
         
         waveLbl = childNode(withName: "waveWon") as! SKLabelNode!
         let displayAction = SKAction.run {
             self.waveLbl.isHidden = false
-            self.waveLbl.text = "WAVE \(self.index!) COMPLETE!!"
+            self.waveLbl.text = "WAVE \(wave) COMPLETE!!"
             self.waveLbl.position = CGPoint(x: 0, y: 0)
         }
         
@@ -455,6 +470,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             self.testingWaveAlgorithm()
         }
     }
+    
 }
 
 

@@ -40,6 +40,7 @@
 		C6C7562B1E2B324800F11EDB /* Play.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C7562A1E2B324800F11EDB /* Play.png */; };
 		C6C7562D1E2B335000F11EDB /* Upgrades.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C7562C1E2B335000F11EDB /* Upgrades.png */; };
 		C6E65DEF1E4961D1008B1822 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E65DEE1E4961D1008B1822 /* Constants.swift */; };
+		C6E65DF11E58DA7A008B1822 /* OgreWalk.atlas in Resources */ = {isa = PBXBuildFile; fileRef = C6E65DF01E58DA7A008B1822 /* OgreWalk.atlas */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +78,7 @@
 		C6C7562A1E2B324800F11EDB /* Play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Play.png; sourceTree = "<group>"; };
 		C6C7562C1E2B335000F11EDB /* Upgrades.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Upgrades.png; sourceTree = "<group>"; };
 		C6E65DEE1E4961D1008B1822 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		C6E65DF01E58DA7A008B1822 /* OgreWalk.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = OgreWalk.atlas; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 				C6781C991E30665400D13DB1 /* barbackground.png */,
 				C6781C9A1E30665400D13DB1 /* healtbar.png */,
 				C6781CA11E34393F00D13DB1 /* flyingDragon.png */,
+				C6E65DF01E58DA7A008B1822 /* OgreWalk.atlas */,
 				C6781CA51E3C2BEF00D13DB1 /* walk.atlas */,
 				C6643A2E1E2DD6B300B67504 /* MyTileSet.sks */,
 				C6781CA71E3ED7A800D13DB1 /* smoke.sks */,
@@ -234,6 +237,7 @@
 				C6C7561E1E2B2DAA00F11EDB /* PlayScene.sks in Resources */,
 				C6781CA01E3428A700D13DB1 /* MyFortress.png in Resources */,
 				C6C756121E2B2D9000F11EDB /* keep.png in Resources */,
+				C6E65DF11E58DA7A008B1822 /* OgreWalk.atlas in Resources */,
 				C6C7560A1E2B2D6C00F11EDB /* LaunchScreen.storyboard in Resources */,
 				C6C7562B1E2B324800F11EDB /* Play.png in Resources */,
 				C6C755EF1E2AA1D000F11EDB /* Assets.xcassets in Resources */,

@@ -69,6 +69,11 @@ class GameScene: SKScene {
         } else {
             userStats.set(0, forKey: Stats.myCoins)
         }
+        if let waveNumber = userStats.value(forKey: Stats.wave) {
+            PlayScene.WaveSettings.waveNumber = waveNumber as! Int
+        } else {
+            userStats.set(1, forKey: Stats.wave)
+        }
 
         upgradesNode = childNode(withName: "upgrades") as! SKSpriteNode!
         upgradesNode.name = "upgradeMe"

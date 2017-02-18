@@ -19,5 +19,6 @@ struct Stats {
     static let myCoins = "coins"
     static let towerImgName = "towerImage"
     static let damageLvl = "damageLevel"
+    static let wave = "wave"
     
 }
